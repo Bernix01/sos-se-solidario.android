@@ -7,8 +7,31 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
+import android.content.Context;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
+import android.widget.Toast;
+
+import com.google.android.gms.common.api.GoogleApiClient;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DetalleCentroAcopio extends AppCompatActivity {
+
+    private List<Necesidad> necesidadList;
+    private RecyclerView recyclerView;
+    private NecesidadAdapter nAdapter;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,6 +39,8 @@ public class DetalleCentroAcopio extends AppCompatActivity {
         setContentView(R.layout.activity_detalle_centro_acopio);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -40,8 +65,21 @@ public class DetalleCentroAcopio extends AppCompatActivity {
             direccion.setText(value.getDireccion());
             fb.setText(value.getFb());
             tw.setText(value.getTwitter());
+            necesidadList = value.getNecesidades();
         }
+        nAdapter = new NecesidadAdapter(necesidadList);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(nAdapter);
 
+        prepareMovieData();
 
     }
+
+    private void prepareMovieData() {
+        nAdapter.notifyDataSetChanged();
+    }
+
+
 }
