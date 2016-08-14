@@ -3,6 +3,8 @@ package paralelo1.poo.sossesolidario;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -31,6 +33,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import static android.Manifest.permission.READ_CONTACTS;
@@ -49,9 +52,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * A dummy authentication store containing known user names and passwords.
      * TODO: remove after connecting to a real authentication system.
      */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
+    Usuario usuario= new Usuario("Juan Castro","usuario@hotmail.com","@usuario",false);
+    Usuario administrador= new Usuario("Patricio Hurtado","administrador@hotmail.com","@dministrador",true);
+   Usuario usuarioSeleccionado=new Usuario("","","",false);
+    private static final LinkedList<Usuario> DUMMY_CREDENTIALS = new LinkedList();
+
+
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -93,6 +99,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+        DUMMY_CREDENTIALS.add(usuario);
+        DUMMY_CREDENTIALS.add(administrador);
     }
 
     private void populateAutoComplete() {
@@ -299,10 +307,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         private final String mEmail;
         private final String mPassword;
-        private final String usuario="usuario@hotmail.com";
-        private final String Passusuario="@usuario";
-        private final String  administrador="administrador@hotmail.com";
-        private final String Passadministrador="@dministrador";
+
 
 
         UserLoginTask(String email, String password) {
@@ -316,12 +321,21 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             try {
                 // Simulate network access.
-                Thread.sleep(2000);
-                return (mEmail.equals(usuario) && mPassword.equals(Passusuario)) || (mEmail.equals(administrador) && mPassword.equals(Passadministrador));
+                Thread.sleep(1000);
+
             } catch (InterruptedException e) {
                 return false;
             }
 
+            for (Usuario credential : DUMMY_CREDENTIALS) {
+                if (credential.getCorreo().equals(mEmail)&& credential.getContraseña().equals(mPassword)){
+                     usuarioSeleccionado = credential;
+                    return true;
+                }
+            }
+
+            // TODO: register the new account here.
+            return false;
         }
 
         @Override
@@ -330,11 +344,23 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
 
             if (success) {
+                SharedPreferences sharedPref = getSharedPreferences("sos",Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
                 if (mEmail.equals(usuario)) {
                     Log.i("login", "usuario");
+
                 } else if (mEmail.equals(administrador)){
                     Log.i("login", "administrador");
+
                 }
+                editor.putString("nombre",usuarioSeleccionado.getNombre());
+                editor.putString("correo",usuarioSeleccionado.getCorreo());
+                editor.putBoolean("tipo",usuarioSeleccionado.isEsardministrador());
+
+                editor.commit();
+
+                finish();
+
 
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));

@@ -7,11 +7,21 @@ public class Usuario {
     private String nombre;
     private String correo;
     private String contraseña;
+    private boolean esardministrador;
 
-    public Usuario(String nombre, String correo, String contraseña) {
+    public Usuario(String nombre, String correo, String contraseña, boolean esadministrador) {
         this.nombre = nombre;
         this.correo = correo;
         this.contraseña = contraseña;
+        this.esardministrador=esadministrador;
+    }
+
+    public boolean isEsardministrador() {
+        return esardministrador;
+    }
+
+    public void setEsardministrador(boolean esardministrador) {
+        this.esardministrador = esardministrador;
     }
 
     public String getNombre() {

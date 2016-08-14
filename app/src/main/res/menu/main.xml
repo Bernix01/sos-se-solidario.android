@@ -6,4 +6,8 @@
         android:orderInCategory="100"
         android:title="@string/action_settings"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/cerrar_sesion"
+        android:title="@string/cerrar_sesion"/>
+
 </menu>

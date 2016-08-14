@@ -1,7 +1,6 @@
 package paralelo1.poo.sossesolidario;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,13 +16,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.content.Intent;
+import android.app.Activity;
+import android.widget.TextView;
 import android.view.View;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, CAFragment.OnFragmentInteractionListener {
 
-    @Override
 
+    protected View headerLayout;
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -47,13 +50,35 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        headerLayout = navigationView.getHeaderView(0);
 
-        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-        String correo= sharedPref.getString("Correos","no Existe");
+        SharedPreferences sharedPref = getSharedPreferences("sos",Context.MODE_PRIVATE);
+        String correo= sharedPref.getString("correo","noExiste");
 
-        if (!correo.equals("no Existe")) {
-
+        if (correo.equals("noExiste")) {
+            Intent intent = new Intent(this,LoginActivity.class);
+            startActivity(intent);
         }
+
+
+        String nombre= sharedPref.getString("nombre","noExixte");
+        boolean tipo= sharedPref.getBoolean("tipo",false);
+
+        TextView menu_nombre = (TextView)headerLayout.findViewById(R.id.menu_nombre);
+        TextView menu_correo = (TextView)headerLayout.findViewById(R.id.menu_correo);
+
+
+        if (tipo){
+            nombre= nombre+ "  Admi";
+        }
+        menu_nombre.setText(nombre);
+        menu_correo.setText(correo);
+
+
+
+
+
+
     }
 
     @Override
@@ -64,6 +89,31 @@ public class MainActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        SharedPreferences sharedPref = getSharedPreferences("sos",Context.MODE_PRIVATE);
+        String correo= sharedPref.getString("correo","noExiste");
+
+
+
+
+        String nombre= sharedPref.getString("nombre","noExixte");
+        boolean tipo= sharedPref.getBoolean("tipo",false);
+
+        TextView menu_nombre = (TextView)headerLayout.findViewById(R.id.menu_nombre);
+        TextView menu_correo = (TextView)headerLayout.findViewById(R.id.menu_correo);
+
+
+        if (tipo){
+            nombre= nombre+ "  (Admin)";
+        }
+        menu_nombre.setText(nombre);
+        menu_correo.setText(correo);
+
+
     }
 
     @Override
@@ -79,13 +129,22 @@ public class MainActivity extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+        switch (id){
+            case R.id.action_settings:
+                return true;
+            case R.id.cerrar_sesion:
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+                getSharedPreferences("sos",Context.MODE_PRIVATE).edit().clear();
+
+                Intent intent = new Intent(this,LoginActivity.class);
+                startActivity(intent);
+
+
+
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
