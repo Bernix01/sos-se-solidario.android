@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity
         super.onResume();
         SharedPreferences sharedPref = getSharedPreferences("sos",Context.MODE_PRIVATE);
         String correo= sharedPref.getString("correo","noExiste");
-
+        //ya
 
 
 
