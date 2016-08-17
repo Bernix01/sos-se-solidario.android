@@ -1,6 +1,7 @@
-package paralelo1.poo.sossesolidario;
+package paralelo1.poo.sossesolidario.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,13 +17,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.content.Intent;
-import android.app.Activity;
-import android.widget.TextView;
 import android.view.View;
+import android.widget.TextView;
+
+import paralelo1.poo.sossesolidario.R;
+import paralelo1.poo.sossesolidario.fragments.CAFragment;
+import paralelo1.poo.sossesolidario.fragments.DonarFragment;
+import paralelo1.poo.sossesolidario.fragments.MisDonacionesFragment;
+import paralelo1.poo.sossesolidario.objects.CA;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, CAFragment.OnFragmentInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener, CAFragment.OnFragmentInteractionListener, DonarFragment.OnFragmentInteractionListener, MisDonacionesFragment.OnFragmentInteractionListener {
 
 
     protected View headerLayout;
@@ -163,10 +168,10 @@ public class MainActivity extends AppCompatActivity
                 fragmentClass = CAFragment.class;
                 break;
             case R.id.nav_donar:
-                //fragmentClass = DonarFragment.class;
+                fragmentClass = DonarFragment.class;
                 break;
             case R.id.nav_mis_donaciones:
-                //fragmentClass = MisDonacionesFragment.class;
+                fragmentClass = MisDonacionesFragment.class;
                 break;
             default:
                 fragmentClass = CAFragment.class;

@@ -1,29 +1,23 @@
-package paralelo1.poo.sossesolidario;
+package paralelo1.poo.sossesolidario.fragments;
 
 /**
  * Created by roche on 14/08/2016.
  */
 
-        import android.support.v7.widget.RecyclerView;
-        import android.view.LayoutInflater;
-        import android.view.View;
-        import android.view.ViewGroup;
-        import android.widget.TextView;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
-        import java.util.List;
-        public class NecesidadAdapter extends RecyclerView.Adapter<NecesidadAdapter.MyViewHolder>{
+import java.util.List;
+
+import paralelo1.poo.sossesolidario.R;
+import paralelo1.poo.sossesolidario.objects.Necesidad;
+
+public class NecesidadAdapter extends RecyclerView.Adapter<NecesidadAdapter.MyViewHolder> {
 
         private List<Necesidad> necesidadlist;
-
-        public class MyViewHolder extends RecyclerView.ViewHolder {
-                public TextView title, prod, cant;
-
-                public MyViewHolder(View view) {
-                        super(view);
-                        prod = (TextView) view.findViewById(R.id.producto);
-                        cant = (TextView) view.findViewById(R.id.cantidad);
-                }
-        }
 
                 public NecesidadAdapter(List<Necesidad> necesidadlist) {
                         this.necesidadlist = necesidadlist;
@@ -49,4 +43,14 @@ package paralelo1.poo.sossesolidario;
                 public int getItemCount() {
                         return necesidadlist.size();
                 }
+
+        public class MyViewHolder extends RecyclerView.ViewHolder {
+                public TextView title, prod, cant;
+
+                public MyViewHolder(View view) {
+                        super(view);
+                        prod = (TextView) view.findViewById(R.id.producto);
+                        cant = (TextView) view.findViewById(R.id.cantidad);
+                }
+        }
 }

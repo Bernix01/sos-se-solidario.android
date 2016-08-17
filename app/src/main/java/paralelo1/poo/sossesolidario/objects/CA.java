@@ -1,4 +1,4 @@
-package paralelo1.poo.sossesolidario;
+package paralelo1.poo.sossesolidario.objects;
 
 /**
  * Created by roche on 14/08/2016.
@@ -7,10 +7,12 @@ package paralelo1.poo.sossesolidario;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.strongloop.android.loopback.Model;
+
 import java.util.LinkedList;
 import java.util.List;
 
-public class CA implements Parcelable {
+public class CA extends Model implements Parcelable {
     public static final Creator<CA> CREATOR = new Creator<CA>() {
         @Override
         public CA createFromParcel(Parcel in) {

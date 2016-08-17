@@ -1,15 +1,16 @@
-package paralelo1.poo.sossesolidario;
+package paralelo1.poo.sossesolidario.activities;
 
 
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
-        import android.os.Bundle;
-        import android.app.Activity;
-        import android.view.Menu;
-        import android.view.View;
-        import android.view.View.OnClickListener;
-        import android.widget.Button;
-        import android.widget.EditText;
-        import android.widget.Toast;
+import paralelo1.poo.sossesolidario.R;
 
 public class EditCA extends Activity {
     EditText eText1, eText2, eText3, eText4, eText5;

@@ -1,7 +1,9 @@
-package paralelo1.poo.sossesolidario;
+package paralelo1.poo.sossesolidario.utils;
+
 import android.app.Activity;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+
 /**
  * Created by roche on 14/08/2016.
  */

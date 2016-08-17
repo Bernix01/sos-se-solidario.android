@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/SOSSesolidario.iml" filepath="$PROJECT_DIR$/SOSSesolidario.iml" />
+      <module fileurl="file://$PROJECT_DIR$/android.iml" filepath="$PROJECT_DIR$/android.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/sos-se-solidario.android.iml" filepath="$PROJECT_DIR$/sos-se-solidario.android.iml" />
     </modules>
   </component>
 </project>

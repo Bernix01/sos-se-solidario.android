@@ -1,4 +1,4 @@
-package paralelo1.poo.sossesolidario;
+package paralelo1.poo.sossesolidario.utils;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
@@ -6,14 +6,14 @@ import android.database.sqlite.SQLiteOpenHelper;
 /**
  * Created by roche on 14/08/2016.
  */
-public class NecesidadSQLiteHelper extends SQLiteOpenHelper{
+public class CASQLiteHelper extends SQLiteOpenHelper{
 
     //Sentencia SQL para crear la tabla de Usuarios
-    String sqlCreate = "CREATE TABLE Usuarios (codigo INTEGER, nombre TEXT)";
+    String sqlCreate = "CREATE TABLE Usuarios (id INTEGER, nombre TEXT, lat LONG, lon LONG, facebook TEXT, twitter TEXT)";
 
-    public NecesidadSQLiteHelper(Context context, String nombr,
-                                CursorFactory factor, int versio) {
-        super(context, nombr, factor, versio);
+    public CASQLiteHelper(Context contexto, String nombre,
+                                CursorFactory factory, int version) {
+        super(contexto, nombre, factory, version);
     }
 
     @Override
@@ -30,7 +30,7 @@ public class NecesidadSQLiteHelper extends SQLiteOpenHelper{
         //      a la nueva, por lo que este método debería ser más elaborado.
 
         //Se elimina la versión anterior de la tabla
-        db.execSQL("DROP TABLE IF EXISTS Necesidad");
+        db.execSQL("DROP TABLE IF EXISTS CA");
 
         //Se crea la nueva versión de la tabla
         db.execSQL(sqlCreate);

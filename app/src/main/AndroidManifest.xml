@@ -21,10 +21,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".LoginActivity"
+            android:name=".activities.LoginActivity"
             android:label="@string/title_activity_login"></activity>
-        <activity
-            android:name=".MainActivity">
+        <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -52,7 +51,7 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".EditCA"
+            android:name=".activities.EditCA"
             android:label="@string/title_activity_edit_c"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>

@@ -1,4 +1,4 @@
-package paralelo1.poo.sossesolidario;
+package paralelo1.poo.sossesolidario.objects;
 
 /**
  * Created by whugo on 14/8/2016.

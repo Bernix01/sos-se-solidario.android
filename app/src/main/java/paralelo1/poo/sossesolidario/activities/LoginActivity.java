@@ -1,25 +1,23 @@
-package paralelo1.poo.sossesolidario;
+package paralelo1.poo.sossesolidario.activities;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
-
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Loader;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -36,6 +34,9 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import paralelo1.poo.sossesolidario.R;
+import paralelo1.poo.sossesolidario.objects.Usuario;
+
 import static android.Manifest.permission.READ_CONTACTS;
 
 /**
@@ -47,7 +48,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * Id to identity READ_CONTACTS permission request.
      */
     private static final int REQUEST_READ_CONTACTS = 0;
-
+    private static final LinkedList<Usuario> DUMMY_CREDENTIALS = new LinkedList();
     /**
      * A dummy authentication store containing known user names and passwords.
      * TODO: remove after connecting to a real authentication system.
@@ -55,9 +56,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     Usuario usuario= new Usuario("Juan Castro","usuario@hotmail.com","@usuario",false);
     Usuario administrador= new Usuario("Patricio Hurtado","administrador@hotmail.com","@dministrador",true);
    Usuario usuarioSeleccionado=new Usuario("","","",false);
-    private static final LinkedList<Usuario> DUMMY_CREDENTIALS = new LinkedList();
-
-
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */

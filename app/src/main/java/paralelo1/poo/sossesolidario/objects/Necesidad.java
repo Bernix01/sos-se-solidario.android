@@ -1,13 +1,21 @@
-package paralelo1.poo.sossesolidario;
+package paralelo1.poo.sossesolidario.objects;
+
+import com.strongloop.android.loopback.Model;
 
 /**
  * Created by roche on 14/08/2016.
  */
-public class Necesidad {
+public class Necesidad extends Model {
 
     private tipos_necesidad tipo;
     private int cantidad;
     private String nombre;
+
+    public Necesidad(tipos_necesidad tipo, int cantidad, String nombre) {
+        this.tipo = tipo;
+        this.cantidad = cantidad;
+        this.nombre = nombre;
+    }
 
     public tipos_necesidad getTipo() {
         return tipo;
@@ -30,12 +38,6 @@ public class Necesidad {
     }
 
     public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public Necesidad(tipos_necesidad tipo, int cantidad, String nombre) {
-        this.tipo = tipo;
-        this.cantidad = cantidad;
         this.nombre = nombre;
     }
     static enum tipos_necesidad{
