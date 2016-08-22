@@ -22,12 +22,11 @@ import android.widget.TextView;
 
 import paralelo1.poo.sossesolidario.R;
 import paralelo1.poo.sossesolidario.fragments.CAFragment;
-import paralelo1.poo.sossesolidario.fragments.DonarFragment;
 import paralelo1.poo.sossesolidario.fragments.MisDonacionesFragment;
 import paralelo1.poo.sossesolidario.objects.CA;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, CAFragment.OnFragmentInteractionListener, DonarFragment.OnFragmentInteractionListener, MisDonacionesFragment.OnFragmentInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener, CAFragment.OnFragmentInteractionListener {
 
 
     protected View headerLayout;
@@ -171,7 +170,7 @@ public class MainActivity extends AppCompatActivity
                 fragmentClass = CAFragment.class;
                 break;
             case R.id.nav_donar:
-                fragmentClass = DonarFragment.class;
+                startActivity(new Intent(getApplicationContext(), DonarActivity.class));
                 break;
             case R.id.nav_mis_donaciones:
                 fragmentClass = MisDonacionesFragment.class;
@@ -210,6 +209,6 @@ public class MainActivity extends AppCompatActivity
     public void abrirCA(CA centro) {
         Intent i = new Intent(this, DetalleCentroAcopio.class);
         i.putExtra("nombre", centro);
-
+        startActivity(i);
     }
 }

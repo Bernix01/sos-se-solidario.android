@@ -1,8 +1,8 @@
 package paralelo1.poo.sossesolidario.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -41,37 +41,49 @@ public class DetalleCentroAcopio extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
-        TextView nombre = (TextView) findViewById(R.id.nombre);
         TextView descripcion = (TextView) findViewById(R.id.dscr);
         TextView direccion = (TextView) findViewById(R.id.direccion);
         TextView fb = (TextView) findViewById(R.id.facebook);
         TextView tw = (TextView) findViewById(R.id.tw);
         Bundle extras = getIntent().getExtras();
+
         if (extras != null) {
-            CA value = extras.getParcelable("nombre");
+            final CA value = extras.getParcelable("nombre");
             //The key argument here must match that used in the other activity
-            nombre.setText(value.getNombre());
+            assert descripcion != null;
+            if (value == null) {
+                finish();
+                return;
+            }
             descripcion.setText(value.getDscr());
+            getSupportActionBar().setTitle(value.getNombre());
+            assert direccion != null;
             direccion.setText(value.getDireccion());
+            assert fb != null;
             fb.setText(value.getFb());
+            assert tw != null;
             tw.setText(value.getTw());
             necesidadList = value.getNecesidades();
-        }
-        nAdapter = new NecesidadAdapter(necesidadList);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(nAdapter);
 
-        prepareMovieData();
+            assert fab != null;
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent i = new Intent(getApplicationContext(), DonarActivity.class);
+                    i.putExtra("ca", value);
+                    startActivity(i);
+                }
+            });
+        }
+        if (necesidadList != null && necesidadList.size() > 0) {
+
+            nAdapter = new NecesidadAdapter(necesidadList);
+            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+            recyclerView.setLayoutManager(mLayoutManager);
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
+            recyclerView.setAdapter(nAdapter);
+            prepareMovieData();
+        }
 
     }
 

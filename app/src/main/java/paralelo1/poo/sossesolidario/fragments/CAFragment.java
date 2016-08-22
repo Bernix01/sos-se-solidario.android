@@ -10,7 +10,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,10 +22,12 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.strongloop.android.loopback.RestAdapter;
 import com.strongloop.android.loopback.callbacks.ListCallback;
 
+import java.util.HashMap;
 import java.util.List;
 
 import paralelo1.poo.sossesolidario.R;
@@ -48,6 +49,7 @@ public class CAFragment extends Fragment implements OnMapReadyCallback, GoogleAp
     private GoogleMap mMap;
     private OnFragmentInteractionListener mListener;
     private GoogleApiClient mGoogleApiClient;
+    private HashMap<Marker, CA> MarkeryCA;
 
     public CAFragment() {
         // Required empty public constructor
@@ -147,6 +149,18 @@ public class CAFragment extends Fragment implements OnMapReadyCallback, GoogleAp
             mMap.addMarker(new MarkerOptions().position(latLng).title("Marker in Sydney"));
             mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
         }
+        mapView.onResume();
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                CA tmp = MarkeryCA.get(marker);
+                if (tmp != null) {
+                    mListener.abrirCA(tmp);
+                    return true;
+                }
+                return false;
+            }
+        });
         getData();
     }
 
@@ -157,7 +171,7 @@ public class CAFragment extends Fragment implements OnMapReadyCallback, GoogleAp
         repo.findAll(new ListCallback<CA>() {
             @Override
             public void onSuccess(List<CA> objects) {
-                Log.d(this.getClass().getCanonicalName(),objects.toString());
+                displayData(objects);
             }
 
             @Override
@@ -165,6 +179,13 @@ public class CAFragment extends Fragment implements OnMapReadyCallback, GoogleAp
                 t.printStackTrace();
             }
         });
+    }
+
+    private void displayData(List<CA> cas) {
+        MarkeryCA = new HashMap<>();
+        for (CA ca : cas) {
+            MarkeryCA.put(mMap.addMarker(new MarkerOptions().position(ca.getPos())), ca);
+        }
     }
 
     @Override
