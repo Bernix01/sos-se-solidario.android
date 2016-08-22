@@ -15,13 +15,11 @@ public class AndroidBasedeDatos extends Activity{
         //setContentView(R.layout.main);
 
         //Abrimos la base de datos 'DBUsuarios' en modo escritura
-        CASQLiteHelper usdbh =
-                new CASQLiteHelper(this, "DBUsuarios", null, 1);
 
         NecesidadSQLiteHelper nsdbh =
                 new NecesidadSQLiteHelper(this, "DBUsuarios", null, 1);
 
-        SQLiteDatabase db = usdbh.getWritableDatabase();
+        SQLiteDatabase db = nsdbh.getWritableDatabase();
 
         //Si hemos abierto correctamente la base de datos
         if(db != null)

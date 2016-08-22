@@ -4,6 +4,8 @@ package paralelo1.poo.sossesolidario.objects;
  * Created by roche on 14/08/2016.
  */
 
+import android.content.Context;
+import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -11,6 +13,8 @@ import com.strongloop.android.loopback.Model;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import paralelo1.poo.sossesolidario.utils.CADbAdapter;
 
 public class CA extends Model implements Parcelable {
     public static final Creator<CA> CREATOR = new Creator<CA>() {
@@ -24,6 +28,7 @@ public class CA extends Model implements Parcelable {
             return new CA[size];
         }
     };
+    private int ide;
     private long latitud;
     private long longitud;
     private String nombre;
@@ -33,7 +38,8 @@ public class CA extends Model implements Parcelable {
     private List<Necesidad> necesidades;
     private String descripcion;
 
-    public CA(long latitud, long longitud, String nombre, String direccion, String fb, String twitter) {
+    public CA(int ide, long latitud, long longitud, String nombre, String direccion, String fb, String twitter) {
+        this.ide = ide;
         this.latitud = latitud;
         this.longitud = longitud;
         this.nombre = nombre;
@@ -43,7 +49,8 @@ public class CA extends Model implements Parcelable {
         this.necesidades = new LinkedList<>();
     }
 
-    public CA(long latitud, long longitud, String nombre, String direccion, String fb, String twitter, List<Necesidad> necesidades) {
+    public CA(int ide, long latitud, long longitud, String nombre, String direccion, String fb, String twitter, List<Necesidad> necesidades) {
+        this.ide = ide;
         this.latitud = latitud;
         this.longitud = longitud;
         this.nombre = nombre;
@@ -53,7 +60,8 @@ public class CA extends Model implements Parcelable {
         this.necesidades = necesidades;
     }
 
-    protected CA(Parcel in) {
+    public CA(Parcel in) {
+        ide = in.readInt();
         latitud = in.readLong();
         longitud = in.readLong();
         nombre = in.readString();
@@ -61,6 +69,16 @@ public class CA extends Model implements Parcelable {
         fb = in.readString();
         twitter = in.readString();
         descripcion = in.readString();
+    }
+
+    public CA(){}
+
+    public int getIde() {
+        return ide;
+    }
+
+    public void setIde(int ide) {
+        this.ide = ide;
     }
 
     public String getDescripcion() {
@@ -75,7 +93,7 @@ public class CA extends Model implements Parcelable {
         return latitud;
     }
 
-    public void setLatitud(int latitud) {
+    public void setLatitud(long latitud) {
         this.latitud = latitud;
     }
 
@@ -83,7 +101,7 @@ public class CA extends Model implements Parcelable {
         return longitud;
     }
 
-    public void setLongitud(int longitud) {
+    public void setLongitud(long longitud) {
         this.longitud = longitud;
     }
 
@@ -141,5 +159,26 @@ public class CA extends Model implements Parcelable {
         parcel.writeString(fb);
         parcel.writeString(twitter);
         parcel.writeString(descripcion);
+    }
+    public static CA cursorToHipoteca(Context context, Cursor c)
+    {
+        CA ca = null;
+
+        if (c != null)
+        {
+            ca = new CA();
+
+            ca.setIde(c.getInt(c.getColumnIndex(CADbAdapter.C_COLUMNA_ID)));
+            ca.setNombre(c.getString(c.getColumnIndex(CADbAdapter.C_COLUMNA_NOMBRE)));
+            ca.setLatitud(c.getLong(c.getColumnIndex(CADbAdapter.C_COLUMNA_LATITUD)));
+            ca.setLongitud(c.getLong(c.getColumnIndex(CADbAdapter.C_COLUMNA_LONGITUD)));
+            ca.setDireccion(c.getString(c.getColumnIndex(CADbAdapter.C_COLUMNA_DIRECCION)));
+            ca.setFb(c.getString(c.getColumnIndex(CADbAdapter.C_COLUMNA_FACEBOOK)));
+            ca.setTwitter(c.getString(c.getColumnIndex(CADbAdapter.C_COLUMNA_TWITTER)));
+            ca.setDescripcion(c.getString(c.getColumnIndex(CADbAdapter.C_COLUMNA_DESCRIPCION)));
+            //ca.setNecesidades(c.get(c.getColumnIndex(CADbAdapter.C_COLUMNA_NECESIDADES)));
+        }
+
+        return ca;
     }
 }
