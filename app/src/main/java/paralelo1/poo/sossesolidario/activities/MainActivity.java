@@ -20,20 +20,34 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import paralelo1.poo.sossesolidario.fragments.NecesidadFragment;
 import paralelo1.poo.sossesolidario.R;
 import paralelo1.poo.sossesolidario.fragments.CAFragment;
 import paralelo1.poo.sossesolidario.fragments.MisDonacionesFragment;
 import paralelo1.poo.sossesolidario.objects.CA;
+import paralelo1.poo.sossesolidario.objects.Necesidad;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, CAFragment.OnFragmentInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener, CAFragment.OnFragmentInteractionListener, NecesidadFragment.OnListFragmentInteractionListener, MisDonacionesFragment.OnFragmentInteractionListener, AdminCA.OnFragmentInteractionListener {
 
+    private boolean isAdmin;
 
     protected View headerLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        SharedPreferences sharedPref = getSharedPreferences("sos",Context.MODE_PRIVATE);
+        String correo= sharedPref.getString("correo","noExiste");
+
+        String nombre= sharedPref.getString("nombre","noExixte");
+        isAdmin= sharedPref.getBoolean("tipo",false);
+        if (correo.equals("noExiste")) {
+            Intent intent = new Intent(this,LoginActivity.class);
+            startActivity(intent);
+        }
+
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -54,28 +68,23 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         assert navigationView != null;
+        if(isAdmin){
+            navigationView.getMenu().clear();
+            navigationView.inflateMenu(R.menu.activity_main_drawer_admin);
+        }
         navigationView.setNavigationItemSelectedListener(this);
         headerLayout = navigationView.getHeaderView(0);
 
-        SharedPreferences sharedPref = getSharedPreferences("sos",Context.MODE_PRIVATE);
-        String correo= sharedPref.getString("correo","noExiste");
 
-        if (correo.equals("noExiste")) {
-            Intent intent = new Intent(this,LoginActivity.class);
-            startActivity(intent);
-        }
-
-
-        String nombre= sharedPref.getString("nombre","noExixte");
-        boolean tipo= sharedPref.getBoolean("tipo",false);
 
         TextView menu_nombre = (TextView)headerLayout.findViewById(R.id.menu_nombre);
         TextView menu_correo = (TextView)headerLayout.findViewById(R.id.menu_correo);
 
 
-        if (tipo){
+        if (isAdmin){
             nombre= nombre+ "  Admi";
         }
         menu_nombre.setText(nombre);
@@ -170,13 +179,17 @@ public class MainActivity extends AppCompatActivity
                 fragmentClass = CAFragment.class;
                 break;
             case R.id.nav_donar:
-                startActivity(new Intent(getApplicationContext(), DonarActivity.class));
+                fragmentClass = NecesidadFragment.class;
                 break;
             case R.id.nav_mis_donaciones:
                 fragmentClass = MisDonacionesFragment.class;
                 break;
+            case R.id.nav_admin_ca:
+                fragmentClass = AdminCA.class;
+                break;
             default:
                 fragmentClass = CAFragment.class;
+                break;
         }
 
         try {
@@ -209,6 +222,13 @@ public class MainActivity extends AppCompatActivity
     public void abrirCA(CA centro) {
         Intent i = new Intent(this, DetalleCentroAcopio.class);
         i.putExtra("nombre", centro);
+        startActivity(i);
+    }
+
+    @Override
+    public void onListFragmentInteraction(Necesidad item) {
+        Intent i = new Intent(getApplicationContext(),DonarActivity.class);
+        i.putExtra("cosa",item);
         startActivity(i);
     }
 }

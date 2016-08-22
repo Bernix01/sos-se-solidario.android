@@ -17,5 +17,13 @@
             android:title="Mis donaciones" />
     </group>
 
+    <item android:title="Ayuda">
+        <menu>
+        <item
+            android:id="@+id/nav_admin_ca"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Centros de acopio" />
+
+    </menu> </item>
 
 </menu>

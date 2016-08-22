@@ -1,21 +1,47 @@
 package paralelo1.poo.sossesolidario.objects;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.strongloop.android.loopback.Model;
+
+import java.io.Serializable;
 
 /**
  * Created by roche on 14/08/2016.
  */
-public class Necesidad extends Model {
+public class Necesidad extends Model implements Parcelable {
 
     private tipos_necesidad tipo;
     private int cantidad;
     private String nombre;
+
+    public Necesidad(){
+
+    }
 
     public Necesidad(tipos_necesidad tipo, int cantidad, String nombre) {
         this.tipo = tipo;
         this.cantidad = cantidad;
         this.nombre = nombre;
     }
+
+    protected Necesidad(Parcel in) {
+        cantidad = in.readInt();
+        nombre = in.readString();
+    }
+
+    public static final Creator<Necesidad> CREATOR = new Creator<Necesidad>() {
+        @Override
+        public Necesidad createFromParcel(Parcel in) {
+            return new Necesidad(in);
+        }
+
+        @Override
+        public Necesidad[] newArray(int size) {
+            return new Necesidad[size];
+        }
+    };
 
     public tipos_necesidad getTipo() {
         return tipo;
@@ -40,6 +66,18 @@ public class Necesidad extends Model {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(cantidad);
+        parcel.writeString(nombre);
+    }
+
     static enum tipos_necesidad{
         aseo,ropa,viveres;
     }
