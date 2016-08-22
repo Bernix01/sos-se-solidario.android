@@ -82,8 +82,10 @@ public class MainActivity extends AppCompatActivity
         menu_nombre.setText(nombre);
         menu_correo.setText(correo);
 
-
-
+        CAFragment ca = CAFragment.newInstance();
+        // Insert the fragment by replacing any existing fragment
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.flContent, ca).commit();
 
 
 
@@ -92,6 +94,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        assert drawer != null;
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -142,7 +145,7 @@ public class MainActivity extends AppCompatActivity
                 return true;
             case R.id.cerrar_sesion:
 
-                getSharedPreferences("sos",Context.MODE_PRIVATE).edit().clear();
+                getSharedPreferences("sos",Context.MODE_PRIVATE).edit().clear().commit();
 
                 Intent intent = new Intent(this,LoginActivity.class);
                 startActivity(intent);
@@ -162,7 +165,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         Fragment fragment = null;
-        Class fragmentClass = CAFragment.class;
+        Class fragmentClass;
         switch (id) {
             case R.id.nav_ca:
                 fragmentClass = CAFragment.class;

@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,9 +24,14 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.strongloop.android.loopback.RestAdapter;
+import com.strongloop.android.loopback.callbacks.ListCallback;
+
+import java.util.List;
 
 import paralelo1.poo.sossesolidario.R;
 import paralelo1.poo.sossesolidario.objects.CA;
+import paralelo1.poo.sossesolidario.server.CARepo;
 
 
 /**
@@ -37,15 +43,8 @@ import paralelo1.poo.sossesolidario.objects.CA;
  * create an instance of this fragment.
  */
 public class CAFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
     private static final int LOCATION_PERMISSIONS_CHECK = 1;
     MapView mapView;
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
     private GoogleMap mMap;
     private OnFragmentInteractionListener mListener;
     private GoogleApiClient mGoogleApiClient;
@@ -58,27 +57,16 @@ public class CAFragment extends Fragment implements OnMapReadyCallback, GoogleAp
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment CAFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static CAFragment newInstance(String param1, String param2) {
-        CAFragment fragment = new CAFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    public static CAFragment newInstance() {
+        return new CAFragment();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(getContext())
                     .addConnectionCallbacks(this)
@@ -112,7 +100,6 @@ public class CAFragment extends Fragment implements OnMapReadyCallback, GoogleAp
         }
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -146,12 +133,13 @@ public class CAFragment extends Fragment implements OnMapReadyCallback, GoogleAp
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, LOCATION_PERMISSIONS_CHECK);
-        }
-        mMap.setMyLocationEnabled(true);
-        // Add a marker in Sydney and move the camera
 
+        }else {
+            mMap.setMyLocationEnabled(true);
+
+        }
         Location sydney = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
         if (sydney != null) {
@@ -163,7 +151,20 @@ public class CAFragment extends Fragment implements OnMapReadyCallback, GoogleAp
     }
 
     private void getData() {
-        
+
+        RestAdapter adapter = new RestAdapter(getContext(),"http://sos-se-solidario.herokuapp.com/api");
+        CARepo repo = adapter.createRepository(CARepo.class);
+        repo.findAll(new ListCallback<CA>() {
+            @Override
+            public void onSuccess(List<CA> objects) {
+                Log.d(this.getClass().getCanonicalName(),objects.toString());
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                t.printStackTrace();
+            }
+        });
     }
 
     @Override

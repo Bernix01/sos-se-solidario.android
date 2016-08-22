@@ -11,97 +11,85 @@ import android.os.Parcelable;
 
 import com.strongloop.android.loopback.Model;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
 import paralelo1.poo.sossesolidario.utils.CADbAdapter;
 
 public class CA extends Model implements Parcelable {
-    public static final Creator<CA> CREATOR = new Creator<CA>() {
-        @Override
-        public CA createFromParcel(Parcel in) {
-            return new CA(in);
-        }
 
-        @Override
-        public CA[] newArray(int size) {
-            return new CA[size];
-        }
-    };
-    private int ide;
-    private long latitud;
-    private long longitud;
+    private double latitud;
+    private double longitud;
     private String nombre;
     private String direccion;
     private String fb;
-    private String twitter;
+    private String tw;
+    private HashMap<String, Double> ubicacion;
     private List<Necesidad> necesidades;
-    private String descripcion;
+    private String dscr;
 
-    public CA(int ide, long latitud, long longitud, String nombre, String direccion, String fb, String twitter) {
-        this.ide = ide;
-        this.latitud = latitud;
+    public CA(){
+
+    }
+
+    public HashMap<String, Double> getUbicacion() {
+        return ubicacion;
+    }
+
+    public void setUbicacion(HashMap<String, Double> ubicacion) {
+        this.ubicacion = ubicacion;
+    }
+
+    public void setLongitud(long longitud) {
         this.longitud = longitud;
-        this.nombre = nombre;
-        this.direccion = direccion;
-        this.fb = fb;
-        this.twitter = twitter;
-        this.necesidades = new LinkedList<>();
-    }
-
-    public CA(int ide, long latitud, long longitud, String nombre, String direccion, String fb, String twitter, List<Necesidad> necesidades) {
-        this.ide = ide;
-        this.latitud = latitud;
-        this.longitud = longitud;
-        this.nombre = nombre;
-        this.direccion = direccion;
-        this.fb = fb;
-        this.twitter = twitter;
-        this.necesidades = necesidades;
-    }
-
-    public CA(Parcel in) {
-        ide = in.readInt();
-        latitud = in.readLong();
-        longitud = in.readLong();
-        nombre = in.readString();
-        direccion = in.readString();
-        fb = in.readString();
-        twitter = in.readString();
-        descripcion = in.readString();
-    }
-
-    public CA(){}
-
-    public int getIde() {
-        return ide;
-    }
-
-    public void setIde(int ide) {
-        this.ide = ide;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public long getLatitud() {
-        return latitud;
     }
 
     public void setLatitud(long latitud) {
         this.latitud = latitud;
     }
 
-    public long getLongitud() {
+    public CA(long latitud, long longitud, String nombre, String direccion, String fb, String tw) {
+        this.latitud = latitud;
+        this.longitud = longitud;
+        this.nombre = nombre;
+        this.direccion = direccion;
+        this.fb = fb;
+        this.tw = tw;
+        this.necesidades = new LinkedList<>();
+    }
+
+    public CA(long latitud, long longitud, String nombre, String direccion, String fb, String tw, List<Necesidad> necesidades) {
+        this.latitud = latitud;
+        this.longitud = longitud;
+        this.nombre = nombre;
+        this.direccion = direccion;
+        this.fb = fb;
+        this.tw = tw;
+        this.necesidades = necesidades;
+    }
+
+    public String getDscr() {
+        return dscr;
+    }
+
+    public void setDscr(String dscr) {
+        this.dscr = dscr;
+    }
+
+    public double getLatitud() {
+        return latitud;
+    }
+
+    public void setLatitud(double latitud) {
+        this.latitud = latitud;
+    }
+
+    public double getLongitud() {
         return longitud;
     }
 
-    public void setLongitud(long longitud) {
+    public void setLongitud(double longitud) {
         this.longitud = longitud;
     }
 
@@ -129,12 +117,12 @@ public class CA extends Model implements Parcelable {
         this.fb = fb;
     }
 
-    public String getTwitter() {
-        return twitter;
+    public String getTw() {
+        return tw;
     }
 
-    public void setTwitter(String twitter) {
-        this.twitter = twitter;
+    public void setTw(String tw) {
+        this.tw = tw;
     }
 
     public List<Necesidad> getNecesidades() {
@@ -145,6 +133,44 @@ public class CA extends Model implements Parcelable {
         this.necesidades = necesidades;
     }
 
+
+    @Override
+    public String toString() {
+        return "CA{" +
+                "latitud=" + latitud +
+                ", longitud=" + longitud +
+                ", nombre='" + nombre + '\'' +
+                ", direccion='" + direccion + '\'' +
+                ", fb='" + fb + '\'' +
+                ", tw='" + tw + '\'' +
+                ", ubicacion=" + ubicacion +
+                ", necesidades=" + necesidades +
+                ", dscr='" + dscr + '\'' +
+                '}';
+    }
+
+    protected CA(Parcel in) {
+        latitud = in.readDouble();
+        longitud = in.readDouble();
+        nombre = in.readString();
+        direccion = in.readString();
+        fb = in.readString();
+        tw = in.readString();
+        dscr = in.readString();
+    }
+
+    public static final Creator<CA> CREATOR = new Creator<CA>() {
+        @Override
+        public CA createFromParcel(Parcel in) {
+            return new CA(in);
+        }
+
+        @Override
+        public CA[] newArray(int size) {
+            return new CA[size];
+        }
+    };
+
     @Override
     public int describeContents() {
         return 0;
@@ -152,13 +178,13 @@ public class CA extends Model implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeLong(latitud);
-        parcel.writeLong(longitud);
+        parcel.writeDouble(latitud);
+        parcel.writeDouble(longitud);
         parcel.writeString(nombre);
         parcel.writeString(direccion);
         parcel.writeString(fb);
-        parcel.writeString(twitter);
-        parcel.writeString(descripcion);
+        parcel.writeString(tw);
+        parcel.writeString(dscr);
     }
     public static CA cursorToHipoteca(Context context, Cursor c)
     {
@@ -168,14 +194,13 @@ public class CA extends Model implements Parcelable {
         {
             ca = new CA();
 
-            ca.setIde(c.getInt(c.getColumnIndex(CADbAdapter.C_COLUMNA_ID)));
             ca.setNombre(c.getString(c.getColumnIndex(CADbAdapter.C_COLUMNA_NOMBRE)));
             ca.setLatitud(c.getLong(c.getColumnIndex(CADbAdapter.C_COLUMNA_LATITUD)));
             ca.setLongitud(c.getLong(c.getColumnIndex(CADbAdapter.C_COLUMNA_LONGITUD)));
             ca.setDireccion(c.getString(c.getColumnIndex(CADbAdapter.C_COLUMNA_DIRECCION)));
             ca.setFb(c.getString(c.getColumnIndex(CADbAdapter.C_COLUMNA_FACEBOOK)));
-            ca.setTwitter(c.getString(c.getColumnIndex(CADbAdapter.C_COLUMNA_TWITTER)));
-            ca.setDescripcion(c.getString(c.getColumnIndex(CADbAdapter.C_COLUMNA_DESCRIPCION)));
+            ca.setTw(c.getString(c.getColumnIndex(CADbAdapter.C_COLUMNA_TWITTER)));
+            ca.setDscr(c.getString(c.getColumnIndex(CADbAdapter.C_COLUMNA_DESCRIPCION)));
             //ca.setNecesidades(c.get(c.getColumnIndex(CADbAdapter.C_COLUMNA_NECESIDADES)));
         }
 

@@ -50,19 +50,19 @@ public class DetalleCentroAcopio extends AppCompatActivity {
         });
 
         TextView nombre = (TextView) findViewById(R.id.nombre);
-        TextView descripcion = (TextView) findViewById(R.id.descripcion);
+        TextView descripcion = (TextView) findViewById(R.id.dscr);
         TextView direccion = (TextView) findViewById(R.id.direccion);
         TextView fb = (TextView) findViewById(R.id.facebook);
-        TextView tw = (TextView) findViewById(R.id.twitter);
+        TextView tw = (TextView) findViewById(R.id.tw);
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             CA value = extras.getParcelable("nombre");
             //The key argument here must match that used in the other activity
             nombre.setText(value.getNombre());
-            descripcion.setText(value.getDescripcion());
+            descripcion.setText(value.getDscr());
             direccion.setText(value.getDireccion());
             fb.setText(value.getFb());
-            tw.setText(value.getTwitter());
+            tw.setText(value.getTw());
             necesidadList = value.getNecesidades();
         }
         nAdapter = new NecesidadAdapter(necesidadList);
