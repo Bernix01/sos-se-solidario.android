@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.appindexing.Action;
@@ -84,7 +85,7 @@ public class EditCA extends Activity {
 
 
         // Controlamos visibilidad de botonera
-        LinearLayout v = (LinearLayout) findViewById(R.id.botonera);
+        LinearLayout v = (LinearLayout) findViewById(R.id.fab);
 
         if (opcion)
             v.setVisibility(View.VISIBLE);
