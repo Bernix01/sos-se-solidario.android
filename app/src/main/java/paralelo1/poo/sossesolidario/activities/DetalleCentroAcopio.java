@@ -1,13 +1,16 @@
 package paralelo1.poo.sossesolidario.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -28,6 +31,9 @@ public class DetalleCentroAcopio extends AppCompatActivity {
     private List<Necesidad> necesidadList;
     private RecyclerView recyclerView;
     private NecesidadAdapter nAdapter;
+    private boolean isAdmin;
+    private CA ca;
+
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -51,21 +57,21 @@ public class DetalleCentroAcopio extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
 
         if (extras != null) {
-            final CA value = extras.getParcelable("nombre");
+            ca = extras.getParcelable("nombre");
             //The key argument here must match that used in the other activity
             assert descripcion != null;
-            if (value == null) {
+            if (ca == null) {
                 finish();
                 return;
             }
-            descripcion.setText(value.getDscr());
-            getSupportActionBar().setTitle(value.getNombre());
+            descripcion.setText(ca.getDscr());
+            getSupportActionBar().setTitle(ca.getNombre());
             assert direccion != null;
-            direccion.setText(value.getDireccion());
+            direccion.setText(ca.getDireccion());
             assert fb != null;
-            fb.setText(value.getFb());
+            fb.setText(ca.getFb());
             assert tw != null;
-            tw.setText(value.getTw());
+            tw.setText(ca.getTw());
 
 
             assert fab != null;
@@ -73,18 +79,18 @@ public class DetalleCentroAcopio extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     Intent i = new Intent(getApplicationContext(), DonarActivity.class);
-                    i.putExtra("ca", value);
+                    i.putExtra("ca", ca);
                     startActivity(i);
                 }
             });
-            value.getNecesidades(new Callback<List<Necesidad>>() {
+            ca.getNecesidades(new Callback<List<Necesidad>>() {
                 @Override
                 public void onResponse(Call<List<Necesidad>> call, Response<List<Necesidad>> response) {
                     necesidadList = response.body();
                     if (necesidadList != null && necesidadList.size() > 0) {
 
                         nAdapter = new NecesidadAdapter(necesidadList);
-                        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+                        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
                         recyclerView.setLayoutManager(mLayoutManager);
                         recyclerView.setItemAnimator(new DefaultItemAnimator());
                         recyclerView.setAdapter(nAdapter);
@@ -94,17 +100,48 @@ public class DetalleCentroAcopio extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<List<Necesidad>> call, Throwable t) {
+                    recyclerView.setVisibility(View.INVISIBLE);
 
                 }
             });
         }
+        isAdmin = getSharedPreferences("sos", Context.MODE_PRIVATE).getBoolean("tipo", false);
 
 
     }
+
 
     private void prepareMovieData() {
         nAdapter.notifyDataSetChanged();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_detalle_centro_acopio, menu);
+        return true;
+    }
 
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if (!isAdmin)
+            menu.getItem(0).setVisible(false);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            finish(); // close this activity and return to preview activity (if there is any)
+        }
+        switch (id) {
+            case R.id.action_edit:
+                Intent i = new Intent(getApplicationContext(), EditCA.class);
+                i.putExtra("ca", ca);
+                startActivity(i);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }

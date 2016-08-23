@@ -30,4 +30,5 @@
     <string name="edit_text">Show Edit Text</string>
     <string name="show_the_text">Show the Text</string>
     <string name="enter_text">Text changes</string>
+    <string name="action_edit">editar</string>
 </resources>
