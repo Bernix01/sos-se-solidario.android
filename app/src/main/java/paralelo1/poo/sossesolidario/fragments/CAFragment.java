@@ -3,7 +3,6 @@ package paralelo1.poo.sossesolidario.fragments;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,26 +12,26 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.strongloop.android.loopback.RestAdapter;
-import com.strongloop.android.loopback.callbacks.ListCallback;
 
 import java.util.HashMap;
 import java.util.List;
 
 import paralelo1.poo.sossesolidario.R;
 import paralelo1.poo.sossesolidario.objects.CA;
-import paralelo1.poo.sossesolidario.server.CARepo;
+import paralelo1.poo.sossesolidario.server.Rest;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -142,13 +141,6 @@ public class CAFragment extends Fragment implements OnMapReadyCallback, GoogleAp
             mMap.setMyLocationEnabled(true);
 
         }
-        Location sydney = LocationServices.FusedLocationApi.getLastLocation(
-                mGoogleApiClient);
-        if (sydney != null) {
-            LatLng latLng = new LatLng(sydney.getLatitude(), sydney.getLongitude());
-            mMap.addMarker(new MarkerOptions().position(latLng).title("Marker in Sydney"));
-            mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-        }
         mapView.onResume();
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
@@ -166,17 +158,17 @@ public class CAFragment extends Fragment implements OnMapReadyCallback, GoogleAp
 
     private void getData() {
 
-        RestAdapter adapter = new RestAdapter(getContext(),"http://sos-se-solidario.herokuapp.com/api");
-        CARepo repo = adapter.createRepository(CARepo.class);
-        repo.findAll(new ListCallback<CA>() {
+
+        Call<List<CA>> cas = Rest.get().service().getCAs();
+        cas.enqueue(new Callback<List<CA>>() {
             @Override
-            public void onSuccess(List<CA> objects) {
-                displayData(objects);
+            public void onResponse(Call<List<CA>> call, Response<List<CA>> response) {
+                displayData(response.body());
             }
 
             @Override
-            public void onError(Throwable t) {
-                t.printStackTrace();
+            public void onFailure(Call<List<CA>> call, Throwable t) {
+                Toast.makeText(getContext(), "Error al obtener CAs", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -203,16 +195,6 @@ public class CAFragment extends Fragment implements OnMapReadyCallback, GoogleAp
 
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
 
         void onFragmentInteraction(Uri uri);

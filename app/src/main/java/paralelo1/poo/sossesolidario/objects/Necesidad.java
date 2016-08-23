@@ -3,15 +3,22 @@ package paralelo1.poo.sossesolidario.objects;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.strongloop.android.loopback.Model;
-
-import java.io.Serializable;
-
 /**
  * Created by roche on 14/08/2016.
  */
-public class Necesidad extends Model implements Parcelable {
+public class Necesidad implements Parcelable {
 
+    public static final Creator<Necesidad> CREATOR = new Creator<Necesidad>() {
+        @Override
+        public Necesidad createFromParcel(Parcel in) {
+            return new Necesidad(in);
+        }
+
+        @Override
+        public Necesidad[] newArray(int size) {
+            return new Necesidad[size];
+        }
+    };
     private tipos_necesidad tipo;
     private int cantidad;
     private String nombre;
@@ -30,18 +37,6 @@ public class Necesidad extends Model implements Parcelable {
         cantidad = in.readInt();
         nombre = in.readString();
     }
-
-    public static final Creator<Necesidad> CREATOR = new Creator<Necesidad>() {
-        @Override
-        public Necesidad createFromParcel(Parcel in) {
-            return new Necesidad(in);
-        }
-
-        @Override
-        public Necesidad[] newArray(int size) {
-            return new Necesidad[size];
-        }
-    };
 
     public tipos_necesidad getTipo() {
         return tipo;
