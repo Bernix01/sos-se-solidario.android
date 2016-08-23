@@ -27,7 +27,16 @@ public class CADbAdapter {
     public static final String C_COLUMNA_DESCRIPCION = "ca_descripcion";
     public static final String C_COLUMNA_NECESIDADES = "ca_necesidades";
 
+    public Context getContexto() {
+        return contexto;
+    }
+
     private Context contexto;
+
+    public void setContexto(Context contexto) {
+        this.contexto = contexto;
+    }
+
     private CADbHelper dbHelper;
     private SQLiteDatabase db;
 
@@ -128,7 +137,7 @@ public class CADbAdapter {
         return exists;
     }
 
-    public ArrayList<CA> getHipotecas(String filtro)
+    public ArrayList<CA> getCA(String filtro)
     {
         ArrayList<CA> cas = new ArrayList<CA>();
 

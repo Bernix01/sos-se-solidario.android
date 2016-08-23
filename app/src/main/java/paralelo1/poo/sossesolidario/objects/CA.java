@@ -40,6 +40,7 @@ public class CA extends Model implements Parcelable {
     private HashMap<String, Double> ubicacion;
     private List<Necesidad> necesidades;
     private String dscr;
+    private Context contexto;
 
     public CA(){
 
@@ -183,6 +184,18 @@ public class CA extends Model implements Parcelable {
                 '}';
     }
 
+    public long delete()
+    {
+        // borramos el registro
+        CADbAdapter dbAdapter = new CADbAdapter(this.getContexto());
+
+        return dbAdapter.delete((Long) this.getId());
+    }
+
+    private Context getContexto() {
+        return contexto;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -202,4 +215,6 @@ public class CA extends Model implements Parcelable {
     public LatLng getPos() {
         return new LatLng(this.latitud, this.longitud);
     }
+
+
 }

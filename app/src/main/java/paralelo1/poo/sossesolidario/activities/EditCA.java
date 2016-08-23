@@ -10,6 +10,10 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.view.MenuItem;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.widget.Toast;
 
 import com.strongloop.android.loopback.callbacks.VoidCallback;
 
@@ -120,6 +124,34 @@ public class EditCA extends Activity {
         setResult(RESULT_CANCELED, null);
         finish();
     }
+
+    private void borrar(final long id)
+    {
+		/*
+		 * Borramos el registro con confirmación
+		 */
+        AlertDialog.Builder dialogEliminar = new AlertDialog.Builder(this);
+
+        dialogEliminar.setIcon(android.R.drawable.ic_dialog_alert);
+        dialogEliminar.setCancelable(false);
+
+        dialogEliminar.setPositiveButton(getResources().getString(android.R.string.ok), new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int boton) {
+                ca.delete();
+				/*
+				 * Devolvemos el control
+				 */
+                setResult(RESULT_OK);
+                finish();
+            }
+        });
+
+        dialogEliminar.setNegativeButton(android.R.string.no, null);
+
+        dialogEliminar.show();
+
+    }
 //
 //    @Override
 //    public boolean onCreateOptionsMenu(Menu menu) {
@@ -194,4 +226,23 @@ public class EditCA extends Activity {
 //        AppIndex.AppIndexApi.end(client, viewAction);
 //        client.disconnect();
 //    }
+@Override
+
+public boolean onMenuItemSelected(int featureId, MenuItem item) {
+
+    switch (item.getItemId())
+    {
+        case R.id.btnEliminar:
+            borrar(id);
+            return true;
+
+        case R.id.btnActualizar:
+            guardar();
+            return true;
+
+    }
+
+    return super.onMenuItemSelected(featureId, item);
+}
+
 }
