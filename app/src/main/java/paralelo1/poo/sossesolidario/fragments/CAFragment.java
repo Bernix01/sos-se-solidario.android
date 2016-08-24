@@ -177,7 +177,7 @@ public class CAFragment extends Fragment implements OnMapReadyCallback, GoogleAp
     private void displayData(List<CA> cas) {
         MarkeryCA = new HashMap<>();
         for (CA ca : cas) {
-            MarkeryCA.put(mMap.addMarker(new MarkerOptions().position(ca.getPos()).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_local_hospital_grey_800_18dp))), ca);
+            MarkeryCA.put(mMap.addMarker(new MarkerOptions().position(ca.getPos()).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_local_hospital_grey_900_18dp))), ca);
         }
     }
 
