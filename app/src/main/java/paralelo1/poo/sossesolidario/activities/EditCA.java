@@ -24,6 +24,7 @@ public class EditCA extends Activity {
     Bundle extra = intent.getExtras();
     private long id;
     private CA ca = new CA();
+    Bundle extras = getIntent().getExtras();
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -33,6 +34,14 @@ public class EditCA extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if (extras != null) {
+            final CA value = extras.getParcelable("nombre");
+            //The key argument here must match that used in the other activity
+
+            if (value == null) {
+                finish();
+                return;
+            }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_c);
         eText1 = (EditText) findViewById(R.id.edit_nombre);
@@ -60,7 +69,7 @@ public class EditCA extends Activity {
             }
         });
 
-
+        }
     }
 
 
@@ -219,7 +228,7 @@ public boolean onMenuItemSelected(int featureId, MenuItem item) {
     switch (item.getItemId())
     {
         case R.id.btnEliminar:
-            borrar(id);
+            borrar((Long)ca.getId());
             return true;
 
         case R.id.btnActualizar:
