@@ -145,7 +145,7 @@ public class CAFragment extends Fragment implements OnMapReadyCallback, GoogleAp
 
         }
         mapView.onResume();
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(-1.8312d, -78.1834d), 15));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(-1.8312d, -78.1834d), 6));
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
