@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 
@@ -23,6 +24,7 @@ import paralelo1.poo.sossesolidario.R;
 import paralelo1.poo.sossesolidario.fragments.NecesidadFragment;
 import paralelo1.poo.sossesolidario.objects.CA;
 import paralelo1.poo.sossesolidario.objects.Necesidad;
+import paralelo1.poo.sossesolidario.server.Rest;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -55,69 +57,100 @@ public class DetalleCentroAcopio extends AppCompatActivity {
         TextView direccion = (TextView) findViewById(R.id.direccion);
         TextView fb = (TextView) findViewById(R.id.facebook);
         TextView tw = (TextView) findViewById(R.id.tw);
-        Bundle extras = getIntent().getExtras();
-
-        if (extras != null) {
-            ca = extras.getParcelable("nombre");
-            //The key argument here must match that used in the other activity
-            assert descripcion != null;
-            if (ca == null) {
-                finish();
-                return;
-            }
-            descripcion.setText(ca.getDscr());
-            getSupportActionBar().setTitle(ca.getNombre());
-            assert direccion != null;
-            direccion.setText(ca.getDireccion());
-            assert fb != null;
-            fb.setText(ca.getFb());
-            assert tw != null;
-            tw.setText(ca.getTw());
-
-
-            assert fab != null;
-            fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent i = new Intent(getApplicationContext(), DonarActivity.class);
-                    i.putExtra("ca", ca);
-                    startActivity(i);
-                }
-            });
-            ca.getNecesidades(new Callback<List<Necesidad>>() {
-                @Override
-                public void onResponse(Call<List<Necesidad>> call, Response<List<Necesidad>> response) {
-                    necesidadList = response.body();
-                    if (necesidadList != null && necesidadList.size() > 0) {
-
-                        nAdapter = new MyNecesidadRecyclerViewAdapter(necesidadList, new NecesidadFragment.OnListFragmentInteractionListener() {
-                            @Override
-                            public void onListFragmentInteraction(Necesidad item) {
-                                Intent i = new Intent(getApplicationContext(), DonarActivity.class);
-                                i.putExtra("cosa", item);
-                                startActivity(i);
-                            }
-                        });
-                        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
-                        recyclerView.setLayoutManager(mLayoutManager);
-                        recyclerView.setItemAnimator(new DefaultItemAnimator());
-                        recyclerView.setAdapter(nAdapter);
-                        prepareMovieData();
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<List<Necesidad>> call, Throwable t) {
-                    recyclerView.setVisibility(View.INVISIBLE);
-
-                }
-            });
+        Bundle extras;
+        if (savedInstanceState != null) {
+            extras = savedInstanceState;
+            Toast.makeText(DetalleCentroAcopio.this, "savedInstance", Toast.LENGTH_SHORT).show();
+        }else
+            extras = getIntent().getExtras();
+        if (extras == null)
+            finish();
+        ca = extras.getParcelable("nombre");
+        //The key argument here must match that used in the other activity
+        assert descripcion != null;
+        if (ca == null) {
+            finish();
+            return;
         }
-        isAdmin = getSharedPreferences("sos", Context.MODE_PRIVATE).getBoolean("tipo", false);
+        descripcion.setText(ca.getDscr());
+        getSupportActionBar().setTitle(ca.getNombre());
+        assert direccion != null;
+        direccion.setText(ca.getDireccion());
+        assert fb != null;
+        fb.setText(ca.getFb());
+        assert tw != null;
+        tw.setText(ca.getTw());
 
+
+        assert fab != null;
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(), DonarActivity.class);
+                i.putExtra("ca", ca);
+                startActivity(i);
+            }
+        });
+        ca.getNecesidades(new Callback<List<Necesidad>>() {
+            @Override
+            public void onResponse(Call<List<Necesidad>> call, Response<List<Necesidad>> response) {
+                necesidadList = response.body();
+                if (necesidadList != null && necesidadList.size() > 0) {
+
+                    nAdapter = new MyNecesidadRecyclerViewAdapter(necesidadList, new NecesidadFragment.OnListFragmentInteractionListener() {
+                        @Override
+                        public void onListFragmentInteraction(Necesidad item) {
+                            Intent i = new Intent(getApplicationContext(), DonarActivity.class);
+                            i.putExtra("cosa", item);
+                            startActivity(i);
+                        }
+                    });
+                    RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
+                    recyclerView.setLayoutManager(mLayoutManager);
+                    recyclerView.setItemAnimator(new DefaultItemAnimator());
+                    recyclerView.setAdapter(nAdapter);
+                    prepareMovieData();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Necesidad>> call, Throwable t) {
+                recyclerView.setVisibility(View.INVISIBLE);
+
+            }
+        });
+        Rest.get().service().getCA(ca.getId()).enqueue(new Callback<CA>() {
+            @Override
+            public void onResponse(Call<CA> call, Response<CA> response) {
+                ca = response.body();
+            }
+
+            @Override
+            public void onFailure(Call<CA> call, Throwable t) {
+
+            }
+        });
+
+        isAdmin = getSharedPreferences("sos", Context.MODE_PRIVATE).getBoolean("tipo", false);
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Rest.get().service().getCA(ca.getId()).enqueue(new Callback<CA>() {
+            @Override
+            public void onResponse(Call<CA> call, Response<CA> response) {
+                ca = response.body();
+                Toast.makeText(DetalleCentroAcopio.this, "onresume", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<CA> call, Throwable t) {
+
+            }
+        });
+    }
 
     private void prepareMovieData() {
         nAdapter.notifyDataSetChanged();

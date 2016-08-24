@@ -20,6 +20,9 @@ public interface SOSRestService {
     @GET("CAs")
     Call<List<CA>> getCAs();
 
+    @GET("CAs/{id}")
+    Call<CA> getCA(@Path("id")int id);
+
     @PUT("CAs/{id}")
     Call<CA> updateCA(@Path("id") int id, @Body CA ca);
 

@@ -1,7 +1,7 @@
 package paralelo1.poo.sossesolidario.server;
 
-import retrofit2.GsonConverterFactory;
 import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by FIMCP on 23/08/2016.

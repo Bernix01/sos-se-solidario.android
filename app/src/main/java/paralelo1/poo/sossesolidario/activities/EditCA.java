@@ -5,6 +5,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -17,12 +19,15 @@ import android.widget.LinearLayout;
 
 import paralelo1.poo.sossesolidario.R;
 import paralelo1.poo.sossesolidario.objects.CA;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class EditCA extends AppCompatActivity {
     EditText eText1, eText2, eText3, eText4, eText5;
     Button btn1, btn2;
-    private long id;
-    private CA ca = new CA();
+    private CA ca;
+    CoordinatorLayout coordinatorLayout;
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -36,6 +41,7 @@ public class EditCA extends AppCompatActivity {
         setContentView(R.layout.activity_edit_c);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
         eText1 = (EditText) findViewById(R.id.edit_nombre);
         eText2 = (EditText) findViewById(R.id.edit_descripcion);
         eText3 = (EditText) findViewById(R.id.edit_direccion);
@@ -72,35 +78,16 @@ public class EditCA extends AppCompatActivity {
                 }
             });
 
+            eText1.setText(ca.getNombre());
+            eText2.setText(ca.getDscr());
+            eText3.setText(ca.getDireccion());
+            eText4.setText(ca.getFb());
+            eText5.setText(ca.getTw());
+
         }
 
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar,if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    private void setEdicion(boolean opcion) {
-        eText1.setEnabled(opcion);
-        eText2.setEnabled(opcion);
-        eText3.setEnabled(opcion);
-        eText4.setEnabled(opcion);
-        eText5.setEnabled(opcion);
-
-
-        // Controlamos visibilidad de botonera
-        LinearLayout v = (LinearLayout) findViewById(R.id.fab);
-
-        if (opcion)
-            v.setVisibility(View.VISIBLE);
-
-        else
-            v.setVisibility(View.GONE);
-    }
 
     private void guardar() {
         ca.setNombre(eText1.getText().toString());
@@ -109,12 +96,18 @@ public class EditCA extends AppCompatActivity {
         ca.setFb(eText4.getText().toString());
         ca.setTw(eText5.getText().toString());
 
+        ca.save(new Callback<CA>() {
+            @Override
+            public void onResponse(Call<CA> call, Response<CA> response) {
+                Snackbar.make(coordinatorLayout,"Información actualizada",Snackbar.LENGTH_SHORT).show();
+            }
 
-        //
-        // Devolvemos el control
-        //
-        setResult(RESULT_OK);
-        finish();
+            @Override
+            public void onFailure(Call<CA> call, Throwable t) {
+
+            }
+        });
+
     }
 
     private void cancelar() {
@@ -149,96 +142,6 @@ public class EditCA extends AppCompatActivity {
         dialogEliminar.show();
 
     }
-//
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//
-//        getMenuInflater().inflate(R.menu.hipoteca_formulario_editar, menu);
-//
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onMenuItemSelected(int featureId, MenuItem item) {
-//
-//        switch (item.getItemId())
-//        {
-//            case R.id.menu_eliminar:
-//                borrar(id);
-//                return true;
-//
-//            case R.id.menu_cancelar:
-//                cancelar();
-//                return true;
-//
-//            case R.id.menu_guardar:
-//                guardar();
-//                return true;
-//
-//            case R.id.menu_editar:
-//                establecerModo(HipotecaActivity.C_EDITAR);
-//                return true;
-//        }
-//
-//        return super.onMenuItemSelected(featureId, item);
-//    }
-//
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//
-//        // ATTENTION: This was auto-generated to implement the App Indexing API.
-//        // See https://g.co/AppIndexing/AndroidStudio for more information.
-//        client.connect();
-//        Action viewAction = Action.newAction(
-//                Action.TYPE_VIEW, // TODO: choose an action type.
-//                "EditCA Page", // TODO: Define a title for the content shown.
-//                // TODO: If you have web page content that matches this app activity's content,
-//                // make sure this auto-generated web page URL is correct.
-//                // Otherwise, set the URL to null.
-//                Uri.parse("http://host/path"),
-//                // TODO: Make sure this auto-generated app URL is correct.
-//                Uri.parse("android-app://paralelo1.poo.sossesolidario.activities/http/host/path")
-//        );
-//        AppIndex.AppIndexApi.start(client, viewAction);
-//    }
-//
-//    @Override
-//    public void onStop() {
-//        super.onStop();
-//
-//        // ATTENTION: This was auto-generated to implement the App Indexing API.
-//        // See https://g.co/AppIndexing/AndroidStudio for more information.
-//        Action viewAction = Action.newAction(
-//                Action.TYPE_VIEW, // TODO: choose an action type.
-//                "EditCA Page", // TODO: Define a title for the content shown.
-//                // TODO: If you have web page content that matches this app activity's content,
-//                // make sure this auto-generated web page URL is correct.
-//                // Otherwise, set the URL to null.
-//                Uri.parse("http://host/path"),
-//                // TODO: Make sure this auto-generated app URL is correct.
-//                Uri.parse("android-app://paralelo1.poo.sossesolidario.activities/http/host/path")
-//        );
-//
-//        AppIndex.AppIndexApi.end(client, viewAction);
-//        client.disconnect();
-//    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch (item.getItemId()) {
-            case R.id.btnEliminar:
-                borrar(ca.getId());
-                return true;
-
-            case R.id.btnActualizar:
-                guardar();
-                return true;
-
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
 }
