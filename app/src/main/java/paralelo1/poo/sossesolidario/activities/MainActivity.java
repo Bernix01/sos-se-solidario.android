@@ -20,19 +20,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import paralelo1.poo.sossesolidario.fragments.NecesidadFragment;
 import paralelo1.poo.sossesolidario.R;
 import paralelo1.poo.sossesolidario.fragments.CAFragment;
 import paralelo1.poo.sossesolidario.fragments.MisDonacionesFragment;
+import paralelo1.poo.sossesolidario.fragments.NecesidadFragment;
 import paralelo1.poo.sossesolidario.objects.CA;
 import paralelo1.poo.sossesolidario.objects.Necesidad;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, CAFragment.OnFragmentInteractionListener, NecesidadFragment.OnListFragmentInteractionListener, MisDonacionesFragment.OnFragmentInteractionListener, AdminCA.OnFragmentInteractionListener {
 
+    protected View headerLayout;
     private boolean isAdmin;
 
-    protected View headerLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

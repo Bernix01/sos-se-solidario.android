@@ -19,6 +19,9 @@ import paralelo1.poo.sossesolidario.R;
 import paralelo1.poo.sossesolidario.fragments.NecesidadAdapter;
 import paralelo1.poo.sossesolidario.objects.CA;
 import paralelo1.poo.sossesolidario.objects.Necesidad;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class DetalleCentroAcopio extends AppCompatActivity {
 
@@ -37,7 +40,7 @@ public class DetalleCentroAcopio extends AppCompatActivity {
         setContentView(R.layout.activity_detalle_centro_acopio);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -63,7 +66,7 @@ public class DetalleCentroAcopio extends AppCompatActivity {
             fb.setText(value.getFb());
             assert tw != null;
             tw.setText(value.getTw());
-            necesidadList = value.getNecesidades();
+
 
             assert fab != null;
             fab.setOnClickListener(new View.OnClickListener() {
@@ -74,16 +77,28 @@ public class DetalleCentroAcopio extends AppCompatActivity {
                     startActivity(i);
                 }
             });
-        }
-        if (necesidadList != null && necesidadList.size() > 0) {
+            value.getNecesidades(new Callback<List<Necesidad>>() {
+                @Override
+                public void onResponse(Call<List<Necesidad>> call, Response<List<Necesidad>> response) {
+                    necesidadList = response.body();
+                    if (necesidadList != null && necesidadList.size() > 0) {
 
-            nAdapter = new NecesidadAdapter(necesidadList);
-            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-            recyclerView.setLayoutManager(mLayoutManager);
-            recyclerView.setItemAnimator(new DefaultItemAnimator());
-            recyclerView.setAdapter(nAdapter);
-            prepareMovieData();
+                        nAdapter = new NecesidadAdapter(necesidadList);
+                        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+                        recyclerView.setLayoutManager(mLayoutManager);
+                        recyclerView.setItemAnimator(new DefaultItemAnimator());
+                        recyclerView.setAdapter(nAdapter);
+                        prepareMovieData();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<Necesidad>> call, Throwable t) {
+
+                }
+            });
         }
+
 
     }
 

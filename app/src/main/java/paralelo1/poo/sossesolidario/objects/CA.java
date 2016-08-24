@@ -10,15 +10,18 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.strongloop.android.loopback.Model;
 
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import paralelo1.poo.sossesolidario.server.Rest;
 import paralelo1.poo.sossesolidario.utils.CADbAdapter;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-public class CA extends Model implements Parcelable {
+public class CA implements Parcelable {
 
     public static final Creator<CA> CREATOR = new Creator<CA>() {
         @Override
@@ -37,6 +40,7 @@ public class CA extends Model implements Parcelable {
     private String direccion;
     private String fb;
     private String tw;
+    private int id;
     private HashMap<String, Double> ubicacion;
     private List<Necesidad> necesidades;
     private String dscr;
@@ -105,6 +109,10 @@ public class CA extends Model implements Parcelable {
         this.longitud = this.ubicacion.get("long");
     }
 
+    public int getId() {
+        return id;
+    }
+
     public String getDscr() {
         return dscr;
     }
@@ -161,13 +169,14 @@ public class CA extends Model implements Parcelable {
         this.tw = tw;
     }
 
-    public List<Necesidad> getNecesidades() {
-        return necesidades;
+    public void getNecesidades(Callback<List<Necesidad>> cb) {
+        Rest.get().service().getCaNecesidades(this.id).enqueue(cb);
     }
 
     public void setNecesidades(List<Necesidad> necesidades) {
         this.necesidades = necesidades;
     }
+
 
     @Override
     public String toString() {
@@ -184,12 +193,27 @@ public class CA extends Model implements Parcelable {
                 '}';
     }
 
-    public long delete()
+    public void delete()
     {
         // borramos el registro
-        CADbAdapter dbAdapter = new CADbAdapter(this.getContexto());
+        final CA self = this;
+        Rest.get().service().deleteCA(this.id).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
 
-        return dbAdapter.delete((Long) this.getId());
+                CADbAdapter dbAdapter = new CADbAdapter(self.getContexto());
+                dbAdapter.delete(self.getId());
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public void save(Callback<CA> cb) {
+        Rest.get().service().updateCA(this.id, this).enqueue(cb);
     }
 
     private Context getContexto() {

@@ -10,15 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.strongloop.android.loopback.RestAdapter;
-import com.strongloop.android.loopback.callbacks.ListCallback;
-
 import paralelo1.poo.sossesolidario.MyNecesidadRecyclerViewAdapter;
 import paralelo1.poo.sossesolidario.R;
 import paralelo1.poo.sossesolidario.objects.Necesidad;
-import paralelo1.poo.sossesolidario.server.NecesidadRepo;
-
-import java.util.List;
 
 /**
  * A fragment representing a list of Items.
@@ -74,20 +68,7 @@ public class NecesidadFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            RestAdapter adapter = new RestAdapter(getContext(),"http://sos-se-solidario.herokuapp.com/api");
-            NecesidadRepo repo = adapter.createRepository(NecesidadRepo.class);
-            repo.findAll(new ListCallback<Necesidad>() {
-                @Override
-                public void onSuccess(List<Necesidad> objects) {
-                    adapter1 = new MyNecesidadRecyclerViewAdapter(objects, mListener);
-                    recyclerView.setAdapter(adapter1);
-                }
 
-                @Override
-                public void onError(Throwable t) {
-
-                }
-            });
 
         }
         return view;

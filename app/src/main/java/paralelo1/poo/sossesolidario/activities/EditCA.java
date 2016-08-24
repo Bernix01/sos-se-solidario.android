@@ -2,20 +2,17 @@ package paralelo1.poo.sossesolidario.activities;
 
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.view.MenuItem;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.widget.Toast;
-
-import com.strongloop.android.loopback.callbacks.VoidCallback;
 
 import paralelo1.poo.sossesolidario.R;
 import paralelo1.poo.sossesolidario.objects.CA;
@@ -110,17 +107,6 @@ public class EditCA extends Activity {
         ca.setFb(eText4.getText().toString());
         ca.setTw(eText5.getText().toString());
 
-        ca.save(new VoidCallback() {
-            @Override
-            public void onSuccess() {
-
-            }
-
-            @Override
-            public void onError(Throwable t) {
-
-            }
-        });
 
         //
         // Devolvemos el control

@@ -36,7 +36,7 @@ public class NecesidadAdapter extends RecyclerView.Adapter<NecesidadAdapter.MyVi
                         Necesidad nec = necesidadlist.get(position);
                         //holder.title.setText(movie.getTitle());
                         holder.prod.setText(nec.getNombre());
-                        holder.cant.setText(nec.getCantidad());
+                        holder.cant.setText(String.valueOf(nec.getCantidad()));
                 }
 
                 @Override
