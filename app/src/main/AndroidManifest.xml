@@ -57,7 +57,8 @@
             android:name=".activities.EditCA"
             android:label="@string/title_activity_edit_c"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activities.DonarActivity"></activity>
+        <activity android:name=".activities.DonarActivity" />
+        <activity android:name=".activities.EditNecesidad"></activity>
     </application>
 
 </manifest>

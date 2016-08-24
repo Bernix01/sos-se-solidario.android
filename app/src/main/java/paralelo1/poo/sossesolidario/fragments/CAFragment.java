@@ -47,7 +47,7 @@ import retrofit2.Response;
  */
 public class CAFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     private static final int LOCATION_PERMISSIONS_CHECK = 1;
-    MapView mapView;
+    private MapView mapView;
     private GoogleMap mMap;
     private OnFragmentInteractionListener mListener;
     private GoogleApiClient mGoogleApiClient;
@@ -93,7 +93,7 @@ public class CAFragment extends Fragment implements OnMapReadyCallback, GoogleAp
         // Gets to GoogleMap from the MapView and does initialization stuff
         mapView.getMapAsync(this);
 
-
+        MarkeryCA = new HashMap<>();
         return v;
     }
 
@@ -179,17 +179,17 @@ public class CAFragment extends Fragment implements OnMapReadyCallback, GoogleAp
     }
 
     private void displayData(List<CA> cas) {
-        mMap.clear();
-        MarkeryCA = new HashMap<>();
         for (CA ca : cas) {
-            MarkeryCA.put(mMap.addMarker(new MarkerOptions().position(ca.getPos()).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_local_hospital_grey_900_18dp))), ca);
-        }
-    }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        getData();
+            Marker key = mMap.addMarker(new MarkerOptions().position(ca.getPos()).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_local_hospital_grey_900_18dp)));
+            MarkeryCA.put(key, ca);
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
     @Override

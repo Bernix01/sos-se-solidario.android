@@ -50,6 +50,7 @@ public class DetalleCentroAcopio extends AppCompatActivity {
     private ImageView fb;
     private ImageView tw;
     private RecyclerView.LayoutManager mLayoutManager;
+    private boolean starred;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +70,7 @@ public class DetalleCentroAcopio extends AppCompatActivity {
         if (savedInstanceState != null) {
             extras = savedInstanceState;
             Toast.makeText(DetalleCentroAcopio.this, "savedInstance", Toast.LENGTH_SHORT).show();
-        }else
+        } else
             extras = getIntent().getExtras();
         if (extras == null)
             finish();
@@ -85,17 +86,17 @@ public class DetalleCentroAcopio extends AppCompatActivity {
 
 
         assert fab != null;
-        fab.setImageDrawable(ca.isStarred() ? ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_star_white_18dp) : ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_star_border_white_18dp));
+        fab.setImageDrawable(isStarred() ? ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_star_white_18dp) : ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_star_border_white_18dp));
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                if (ca.isStarred()) {
+                if (isStarred()) {
                     fab.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_star_border_white_18dp));
-                    ca.switchStar();
+                    switchStar();
                 } else {
                     fab.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_star_white_18dp));
-                    ca.switchStar();
+                    switchStar();
                 }
             }
         });
@@ -116,6 +117,10 @@ public class DetalleCentroAcopio extends AppCompatActivity {
 
         isAdmin = getSharedPreferences("sos", Context.MODE_PRIVATE).getBoolean("tipo", false);
 
+    }
+
+    private void switchStar() {
+        starred = !starred;
     }
 
     private void displayData() {
@@ -153,7 +158,7 @@ public class DetalleCentroAcopio extends AppCompatActivity {
                         @Override
                         public void onListFragmentInteraction(Necesidad item) {
                             Intent i = new Intent(getApplicationContext(), DonarActivity.class);
-                            i.putExtra("cosa", item);
+                            i.putExtra("necesidad", item);
                             startActivity(i);
                         }
                     });
@@ -221,5 +226,9 @@ public class DetalleCentroAcopio extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public boolean isStarred() {
+        return starred;
     }
 }

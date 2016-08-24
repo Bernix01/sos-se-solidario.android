@@ -23,8 +23,8 @@ public interface SOSRestService {
     @GET("CAs/{id}")
     Call<CA> getCA(@Path("id")int id);
 
-    @PUT("CAs/{id}")
-    Call<CA> updateCA(@Path("id") int id, @Body CA ca);
+    @PUT("CAs")
+    Call<CA> updateCA(@Body CA ca);
 
     @POST("CAs")
     Call<CA> createCA(@Body CA ca);
@@ -36,10 +36,15 @@ public interface SOSRestService {
     Call<List<Necesidad>> getCaNecesidades(@Path("id") int id);
 
 
-    @POST("CAs/{id}/necesidades")
+    @PUT("CAs/{id}/necesidades")
     Call<Necesidad> addNecesidad(@Path("id") int id);
 
     @GET("necesidades")
     Call<List<Necesidad>> getNecesidades();
 
+    @GET("necesidades/{id}")
+    Call<Necesidad> getNecesidad(@Path("id") int id);
+
+    @DELETE("necesidades/{id}")
+    Call<Void> deleteNecesidad(@Path("id") int id);
 }

@@ -32,6 +32,8 @@ public class MainActivity extends AppCompatActivity
     protected View headerLayout;
     private boolean isAdmin;
 
+    private boolean flag = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,9 +60,15 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(), EditCA.class);
-                i.putExtra("ca", new CA());
-                startActivity(i);
+                if (flag) {
+                    Intent i = new Intent(getApplicationContext(), EditCA.class);
+                    i.putExtra("ca", new CA());
+                    startActivity(i);
+                } else {
+                    Intent i = new Intent(getApplicationContext(), EditNecesidad.class);
+                    i.putExtra("necesidad", new Necesidad());
+                    startActivity(i);
+                }
             }
         });
 
@@ -174,8 +182,10 @@ public class MainActivity extends AppCompatActivity
         switch (id) {
             case R.id.nav_ca:
                 fragmentClass = CAFragment.class;
+                flag = true;
                 break;
             case R.id.nav_donar:
+                flag = false;
                 fragmentClass = NecesidadFragment.class;
                 break;
             case R.id.nav_mis_donaciones:
@@ -222,7 +232,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onListFragmentInteraction(Necesidad item) {
         Intent i = new Intent(getApplicationContext(),DonarActivity.class);
-        i.putExtra("cosa",item);
+        i.putExtra("necesidad", item);
         startActivity(i);
     }
 }

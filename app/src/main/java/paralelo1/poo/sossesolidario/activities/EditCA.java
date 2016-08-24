@@ -9,12 +9,14 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -31,6 +33,7 @@ import retrofit2.Response;
 public class EditCA extends AppCompatActivity {
     public static final int PLACE_PICKER_REQUEST = 1;
     EditText eText1, eText2, eText3, eText4, eText5;
+    Spinner spinner;
     Button btn1, btn2;
     CoordinatorLayout coordinatorLayout;
     private CA ca;
@@ -56,14 +59,13 @@ public class EditCA extends AppCompatActivity {
         btn1 = (Button) findViewById(R.id.btnUbicacion);
         btn2 = (Button) findViewById(R.id.btnEliminar);
 
-
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
 
         if (extras != null) {
             ca = extras.getParcelable("ca");
             //The key argument here must match that used in the other activity
-
+            Log.d("asdasd", String.valueOf(ca.getId()));
             if (ca == null) {
                 finish();
                 return;
@@ -99,6 +101,7 @@ public class EditCA extends AppCompatActivity {
             eText4.setText(ca.getFb());
             eText5.setText(ca.getTw());
 
+
         }
 
     }
@@ -114,6 +117,8 @@ public class EditCA extends AppCompatActivity {
         ca.save(new Callback<CA>() {
             @Override
             public void onResponse(Call<CA> call, Response<CA> response) {
+                Log.d("asdasd", response.raw().toString());
+                Log.d("asdasd", response.message());
                 Snackbar.make(coordinatorLayout,"Información actualizada",Snackbar.LENGTH_SHORT).show();
             }
 

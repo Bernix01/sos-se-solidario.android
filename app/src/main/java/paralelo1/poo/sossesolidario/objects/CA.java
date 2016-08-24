@@ -8,11 +8,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 import paralelo1.poo.sossesolidario.server.Rest;
 import paralelo1.poo.sossesolidario.utils.CADbAdapter;
@@ -39,13 +41,14 @@ public class CA implements Parcelable {
     private String tw;
     private int id;
     private HashMap<String, Double> ubicacion;
-    private List<Necesidad> necesidades;
     private String dscr;
-    private Context contexto;
-    private boolean starred;
 
     public CA(){
-        this.starred = false;
+        this.ubicacion = new HashMap<>();
+        this.id = Math.abs(new Random(System.currentTimeMillis()).nextInt());
+        ubicacion.put("lat", 0d);
+        ubicacion.put("lng", 0d);
+
     }
 
 
@@ -59,6 +62,7 @@ public class CA implements Parcelable {
         fb = in.readString();
         tw = in.readString();
         dscr = in.readString();
+        id = in.readInt();
     }
 
     public static CA cursorToHipoteca(Context context, Cursor c) {
@@ -88,13 +92,6 @@ public class CA implements Parcelable {
         this.ubicacion = ubicacion;
     }
 
-    public boolean isStarred() {
-        return starred;
-    }
-
-    public void switchStar() {
-        this.starred = !this.starred;
-    }
     public int getId() {
         return id;
     }
@@ -159,9 +156,6 @@ public class CA implements Parcelable {
         Rest.get().service().getCaNecesidades(this.id).enqueue(cb);
     }
 
-    public void setNecesidades(List<Necesidad> necesidades) {
-        this.necesidades = necesidades;
-    }
 
 
     public void delete()
@@ -172,8 +166,8 @@ public class CA implements Parcelable {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
 
-                CADbAdapter dbAdapter = new CADbAdapter(self.getContexto());
-                dbAdapter.delete(self.getId());
+//                CADbAdapter dbAdapter = new CADbAdapter(self.getContexto());
+//                dbAdapter.delete(self.getId());
             }
 
             @Override
@@ -184,17 +178,16 @@ public class CA implements Parcelable {
     }
 
     public void save(Callback<CA> cb) {
-        Rest.get().service().updateCA(this.id, this).enqueue(cb);
+        Log.e("asdad", this.id + "");
+        Rest.get().service().updateCA(this).enqueue(cb);
     }
 
-    private Context getContexto() {
-        return contexto;
-    }
 
     @Override
     public int describeContents() {
         return 0;
     }
+
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
@@ -205,6 +198,7 @@ public class CA implements Parcelable {
         parcel.writeString(fb);
         parcel.writeString(tw);
         parcel.writeString(dscr);
+        parcel.writeInt(id);
     }
 
     public LatLng getPos() {

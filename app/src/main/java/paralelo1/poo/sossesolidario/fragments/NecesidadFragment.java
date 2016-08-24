@@ -34,6 +34,8 @@ public class NecesidadFragment extends Fragment {
     private int mColumnCount = 3;
     private OnListFragmentInteractionListener mListener;
     private MyNecesidadRecyclerViewAdapter adapter1;
+    private MyNecesidadRecyclerViewAdapter adapter;
+    private RecyclerView recyclerView;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -68,7 +70,7 @@ public class NecesidadFragment extends Fragment {
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
-            final RecyclerView recyclerView = (RecyclerView) view;
+            recyclerView = (RecyclerView) view;
             if (mColumnCount <= 1) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
             } else {
@@ -77,7 +79,7 @@ public class NecesidadFragment extends Fragment {
             Rest.get().service().getNecesidades().enqueue(new Callback<List<Necesidad>>() {
                 @Override
                 public void onResponse(Call<List<Necesidad>> call, Response<List<Necesidad>> response) {
-                    MyNecesidadRecyclerViewAdapter adapter = new MyNecesidadRecyclerViewAdapter(response.body(), mListener);
+                    adapter = new MyNecesidadRecyclerViewAdapter(response.body(), mListener);
                     recyclerView.setHasFixedSize(true);
                     recyclerView.setAdapter(adapter);
                 }
@@ -93,6 +95,23 @@ public class NecesidadFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (adapter == null)
+            return;
+        Rest.get().service().getNecesidades().enqueue(new Callback<List<Necesidad>>() {
+            @Override
+            public void onResponse(Call<List<Necesidad>> call, Response<List<Necesidad>> response) {
+                adapter.swapData(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<List<Necesidad>> call, Throwable t) {
+
+            }
+        });
+    }
 
     @Override
     public void onAttach(Context context) {

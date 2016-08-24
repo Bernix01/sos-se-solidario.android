@@ -45,6 +45,12 @@ public class MyNecesidadRecyclerViewAdapter extends RecyclerView.Adapter<MyNeces
         });
     }
 
+    public void swapData(List<Necesidad> data) {
+        mValues.clear();
+        mValues.addAll(data);
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getItemCount() {
         return mValues.size();
