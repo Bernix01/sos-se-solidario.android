@@ -53,25 +53,24 @@ public class EditCA extends Activity {
                 finish();
                 return;
             }
-        btn1.setOnClickListener(new OnClickListener() {
+            btn1.setOnClickListener(new OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
-                guardar();
-            }
-        });
+                @Override
+                public void onClick(View v) {
+                    guardar();
+                }
+            });
 
-        btn2.setOnClickListener(new OnClickListener() {
+            btn2.setOnClickListener(new OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
-                cancelar();
-            }
-        });
+                @Override
+                public void onClick(View v) {
+                    cancelar();
+                }
+            });
 
         }
     }
-
 
 
     @Override
@@ -81,8 +80,7 @@ public class EditCA extends Activity {
         return true;
     }
 
-    private void setEdicion(boolean opcion)
-    {
+    private void setEdicion(boolean opcion) {
         eText1.setEnabled(opcion);
         eText2.setEnabled(opcion);
         eText3.setEnabled(opcion);
@@ -120,10 +118,9 @@ public class EditCA extends Activity {
         finish();
     }
 
-    private void borrar(final long id)
-    {
-		/*
-		 * Borramos el registro con confirmación
+    private void borrar(final long id) {
+        /*
+         * Borramos el registro con confirmación
 		 */
         AlertDialog.Builder dialogEliminar = new AlertDialog.Builder(this);
 
@@ -147,7 +144,8 @@ public class EditCA extends Activity {
         dialogEliminar.show();
 
     }
-//
+
+    //
 //    @Override
 //    public boolean onCreateOptionsMenu(Menu menu) {
 //
@@ -221,23 +219,22 @@ public class EditCA extends Activity {
 //        AppIndex.AppIndexApi.end(client, viewAction);
 //        client.disconnect();
 //    }
-@Override
+    
+    @Override
+    public boolean onMenuItemSelected(int featureId, MenuItem item) {
 
-public boolean onMenuItemSelected(int featureId, MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.btnEliminar:
+                borrar(ca.getId());
+                return true;
 
-    switch (item.getItemId())
-    {
-        case R.id.btnEliminar:
-            borrar(ca.getId());
-            return true;
+            case R.id.btnActualizar:
+                guardar();
+                return true;
 
-        case R.id.btnActualizar:
-            guardar();
-            return true;
+        }
 
+        return super.onMenuItemSelected(featureId, item);
     }
-
-    return super.onMenuItemSelected(featureId, item);
-}
 
 }
