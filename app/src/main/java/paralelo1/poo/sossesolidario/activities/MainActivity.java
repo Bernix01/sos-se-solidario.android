@@ -148,8 +148,6 @@ public class MainActivity extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         switch (id){
-            case R.id.action_settings:
-                return true;
             case R.id.cerrar_sesion:
 
                 getSharedPreferences("sos",Context.MODE_PRIVATE).edit().clear().commit();

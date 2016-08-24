@@ -12,7 +12,6 @@ import android.os.Parcelable;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 
 import paralelo1.poo.sossesolidario.server.Rest;
@@ -34,8 +33,6 @@ public class CA implements Parcelable {
             return new CA[size];
         }
     };
-    private double latitud;
-    private double longitud;
     private String nombre;
     private String direccion;
     private String fb;
@@ -45,34 +42,18 @@ public class CA implements Parcelable {
     private List<Necesidad> necesidades;
     private String dscr;
     private Context contexto;
+    private boolean starred;
 
     public CA(){
-
+        this.starred = false;
     }
 
-    public CA(long latitud, long longitud, String nombre, String direccion, String fb, String tw) {
-        this.latitud = latitud;
-        this.longitud = longitud;
-        this.nombre = nombre;
-        this.direccion = direccion;
-        this.fb = fb;
-        this.tw = tw;
-        this.necesidades = new LinkedList<>();
-    }
 
-    public CA(long latitud, long longitud, String nombre, String direccion, String fb, String tw, List<Necesidad> necesidades) {
-        this.latitud = latitud;
-        this.longitud = longitud;
-        this.nombre = nombre;
-        this.direccion = direccion;
-        this.fb = fb;
-        this.tw = tw;
-        this.necesidades = necesidades;
-    }
 
     protected CA(Parcel in) {
-        latitud = in.readDouble();
-        longitud = in.readDouble();
+        ubicacion = new HashMap<>();
+        ubicacion.put("lat", in.readDouble());
+        ubicacion.put("lng", in.readDouble());
         nombre = in.readString();
         direccion = in.readString();
         fb = in.readString();
@@ -87,8 +68,8 @@ public class CA implements Parcelable {
             ca = new CA();
 
             ca.setNombre(c.getString(c.getColumnIndex(CADbAdapter.C_COLUMNA_NOMBRE)));
-            ca.setLatitud(c.getLong(c.getColumnIndex(CADbAdapter.C_COLUMNA_LATITUD)));
-            ca.setLongitud(c.getLong(c.getColumnIndex(CADbAdapter.C_COLUMNA_LONGITUD)));
+            ca.setLatitud(c.getDouble(c.getColumnIndex(CADbAdapter.C_COLUMNA_LATITUD)));
+            ca.setLongitud(c.getDouble(c.getColumnIndex(CADbAdapter.C_COLUMNA_LONGITUD)));
             ca.setDireccion(c.getString(c.getColumnIndex(CADbAdapter.C_COLUMNA_DIRECCION)));
             ca.setFb(c.getString(c.getColumnIndex(CADbAdapter.C_COLUMNA_FACEBOOK)));
             ca.setTw(c.getString(c.getColumnIndex(CADbAdapter.C_COLUMNA_TWITTER)));
@@ -105,10 +86,15 @@ public class CA implements Parcelable {
 
     public void setUbicacion(HashMap<String, Double> ubicacion) {
         this.ubicacion = ubicacion;
-        this.latitud = this.ubicacion.get("lat");
-        this.longitud = this.ubicacion.get("long");
     }
 
+    public boolean isStarred() {
+        return starred;
+    }
+
+    public void switchStar() {
+        this.starred = !this.starred;
+    }
     public int getId() {
         return id;
     }
@@ -122,19 +108,19 @@ public class CA implements Parcelable {
     }
 
     public double getLatitud() {
-        return latitud;
+        return this.ubicacion.get("lat");
     }
 
-    public void setLatitud(long latitud) {
-        this.latitud = latitud;
+    public void setLatitud(double latitud) {
+        this.ubicacion.put("lat", latitud);
     }
 
-    public double getLongitud() {
-        return longitud;
+    public double getlngitud() {
+        return this.ubicacion.get("lng");
     }
 
-    public void setLongitud(long longitud) {
-        this.longitud = longitud;
+    public void setLongitud(double lngitud) {
+        this.ubicacion.put("lng", lngitud);
     }
 
     public String getNombre() {
@@ -178,21 +164,6 @@ public class CA implements Parcelable {
     }
 
 
-    @Override
-    public String toString() {
-        return "CA{" +
-                "latitud=" + latitud +
-                ", longitud=" + longitud +
-                ", nombre='" + nombre + '\'' +
-                ", direccion='" + direccion + '\'' +
-                ", fb='" + fb + '\'' +
-                ", tw='" + tw + '\'' +
-                ", ubicacion=" + ubicacion +
-                ", necesidades=" + necesidades +
-                ", dscr='" + dscr + '\'' +
-                '}';
-    }
-
     public void delete()
     {
         // borramos el registro
@@ -227,8 +198,8 @@ public class CA implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeDouble(latitud);
-        parcel.writeDouble(longitud);
+        parcel.writeDouble(ubicacion.get("lat"));
+        parcel.writeDouble(ubicacion.get("lng"));
         parcel.writeString(nombre);
         parcel.writeString(direccion);
         parcel.writeString(fb);
@@ -237,7 +208,7 @@ public class CA implements Parcelable {
     }
 
     public LatLng getPos() {
-        return new LatLng(this.latitud, this.longitud);
+        return new LatLng(this.ubicacion.get("lat"), this.ubicacion.get("lng"));
     }
 
 

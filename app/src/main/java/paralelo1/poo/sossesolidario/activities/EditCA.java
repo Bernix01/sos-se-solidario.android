@@ -15,7 +15,12 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
+import android.widget.Toast;
+
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
 
 import paralelo1.poo.sossesolidario.R;
 import paralelo1.poo.sossesolidario.objects.CA;
@@ -24,10 +29,11 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class EditCA extends AppCompatActivity {
+    public static final int PLACE_PICKER_REQUEST = 1;
     EditText eText1, eText2, eText3, eText4, eText5;
     Button btn1, btn2;
-    private CA ca;
     CoordinatorLayout coordinatorLayout;
+    private CA ca;
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -47,7 +53,7 @@ public class EditCA extends AppCompatActivity {
         eText3 = (EditText) findViewById(R.id.edit_direccion);
         eText4 = (EditText) findViewById(R.id.edit_facebook);
         eText5 = (EditText) findViewById(R.id.edit_twitter);
-        btn1 = (Button) findViewById(R.id.btnActualizar);
+        btn1 = (Button) findViewById(R.id.btnUbicacion);
         btn2 = (Button) findViewById(R.id.btnEliminar);
 
 
@@ -62,11 +68,20 @@ public class EditCA extends AppCompatActivity {
                 finish();
                 return;
             }
+            final EditCA self = this;
             btn1.setOnClickListener(new OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
-                    guardar();
+                    PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+
+                    try {
+                        startActivityForResult(builder.build(self), PLACE_PICKER_REQUEST);
+                    } catch (GooglePlayServicesRepairableException e) {
+                        e.printStackTrace();
+                    } catch (GooglePlayServicesNotAvailableException e) {
+                        Toast.makeText(EditCA.this, "Google play services unavailable.", Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
 
@@ -110,12 +125,47 @@ public class EditCA extends AppCompatActivity {
 
     }
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.activity_edit_ca, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.action_save:
+                guardar();
+                return true;
+            case R.id.action_delete:
+                borrar();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     private void cancelar() {
         setResult(RESULT_CANCELED, null);
         finish();
     }
 
-    private void borrar(final long id)
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PLACE_PICKER_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                Place place = PlacePicker.getPlace(getApplicationContext(), data);
+                String toastMsg = String.format("Place: %s", place.getName());
+                ca.setLatitud(place.getLatLng().latitude);
+                ca.setLongitud(place.getLatLng().longitude);
+                Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    private void borrar()
     {
 		/*
 		 * Borramos el registro con confirmación

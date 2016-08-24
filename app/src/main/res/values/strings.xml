@@ -31,4 +31,6 @@
     <string name="show_the_text">Show the Text</string>
     <string name="enter_text">Text changes</string>
     <string name="action_edit">editar</string>
+    <string name="action_save">guardar</string>
+    <string name="action_delete">eliminar</string>
 </resources>

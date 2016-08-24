@@ -2,8 +2,10 @@ package paralelo1.poo.sossesolidario.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -12,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +45,11 @@ public class DetalleCentroAcopio extends AppCompatActivity {
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
     private GoogleApiClient client;
+    private TextView descripcion;
+    private TextView direccion;
+    private ImageView fb;
+    private ImageView tw;
+    private RecyclerView.LayoutManager mLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,11 +60,11 @@ public class DetalleCentroAcopio extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        TextView descripcion = (TextView) findViewById(R.id.dscr);
-        TextView direccion = (TextView) findViewById(R.id.direccion);
-        TextView fb = (TextView) findViewById(R.id.facebook);
-        TextView tw = (TextView) findViewById(R.id.tw);
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        descripcion = (TextView) findViewById(R.id.dscr);
+        direccion = (TextView) findViewById(R.id.direccion);
+        fb = (ImageView) findViewById(R.id.fb);
+        tw = (ImageView) findViewById(R.id.tw);
         Bundle extras;
         if (savedInstanceState != null) {
             extras = savedInstanceState;
@@ -65,6 +73,7 @@ public class DetalleCentroAcopio extends AppCompatActivity {
             extras = getIntent().getExtras();
         if (extras == null)
             finish();
+        assert extras != null;
         ca = extras.getParcelable("nombre");
         //The key argument here must match that used in the other activity
         assert descripcion != null;
@@ -72,25 +81,68 @@ public class DetalleCentroAcopio extends AppCompatActivity {
             finish();
             return;
         }
+        displayData();
+
+
+        assert fab != null;
+        fab.setImageDrawable(ca.isStarred() ? ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_star_white_18dp) : ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_star_border_white_18dp));
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (ca.isStarred()) {
+                    fab.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_star_border_white_18dp));
+                    ca.switchStar();
+                } else {
+                    fab.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_star_white_18dp));
+                    ca.switchStar();
+                }
+            }
+        });
+        mLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
+
+        Rest.get().service().getCA(ca.getId()).enqueue(new Callback<CA>() {
+            @Override
+            public void onResponse(Call<CA> call, Response<CA> response) {
+                ca = response.body();
+                displayData();
+            }
+
+            @Override
+            public void onFailure(Call<CA> call, Throwable t) {
+
+            }
+        });
+
+        isAdmin = getSharedPreferences("sos", Context.MODE_PRIVATE).getBoolean("tipo", false);
+
+    }
+
+    private void displayData() {
         descripcion.setText(ca.getDscr());
         getSupportActionBar().setTitle(ca.getNombre());
         assert direccion != null;
         direccion.setText(ca.getDireccion());
-        assert fb != null;
-        fb.setText(ca.getFb());
-        assert tw != null;
-        tw.setText(ca.getTw());
-
-
-        assert fab != null;
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(), DonarActivity.class);
-                i.putExtra("ca", ca);
-                startActivity(i);
-            }
-        });
+        if (ca.getTw() == null || ca.getTw().isEmpty())
+            tw.setVisibility(View.INVISIBLE);
+        else
+            tw.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(ca.getTw()));
+                    startActivity(browserIntent);
+                }
+            });
+        if (ca.getFb() == null || ca.getFb().isEmpty())
+            fb.setVisibility(View.INVISIBLE);
+        else
+            fb.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(ca.getFb()));
+                    startActivity(browserIntent);
+                }
+            });
         ca.getNecesidades(new Callback<List<Necesidad>>() {
             @Override
             public void onResponse(Call<List<Necesidad>> call, Response<List<Necesidad>> response) {
@@ -105,7 +157,6 @@ public class DetalleCentroAcopio extends AppCompatActivity {
                             startActivity(i);
                         }
                     });
-                    RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
                     recyclerView.setLayoutManager(mLayoutManager);
                     recyclerView.setItemAnimator(new DefaultItemAnimator());
                     recyclerView.setAdapter(nAdapter);
@@ -119,20 +170,6 @@ public class DetalleCentroAcopio extends AppCompatActivity {
 
             }
         });
-        Rest.get().service().getCA(ca.getId()).enqueue(new Callback<CA>() {
-            @Override
-            public void onResponse(Call<CA> call, Response<CA> response) {
-                ca = response.body();
-            }
-
-            @Override
-            public void onFailure(Call<CA> call, Throwable t) {
-
-            }
-        });
-
-        isAdmin = getSharedPreferences("sos", Context.MODE_PRIVATE).getBoolean("tipo", false);
-
     }
 
     @Override
@@ -142,7 +179,7 @@ public class DetalleCentroAcopio extends AppCompatActivity {
             @Override
             public void onResponse(Call<CA> call, Response<CA> response) {
                 ca = response.body();
-                Toast.makeText(DetalleCentroAcopio.this, "onresume", Toast.LENGTH_SHORT).show();
+                displayData();
             }
 
             @Override

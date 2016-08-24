@@ -17,10 +17,12 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -143,6 +145,7 @@ public class CAFragment extends Fragment implements OnMapReadyCallback, GoogleAp
 
         }
         mapView.onResume();
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(-1.8312d, -78.1834d), 15));
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
@@ -169,16 +172,24 @@ public class CAFragment extends Fragment implements OnMapReadyCallback, GoogleAp
 
             @Override
             public void onFailure(Call<List<CA>> call, Throwable t) {
+                t.printStackTrace();
                 Toast.makeText(getContext(), "Error al obtener CAs", Toast.LENGTH_LONG).show();
             }
         });
     }
 
     private void displayData(List<CA> cas) {
+        mMap.clear();
         MarkeryCA = new HashMap<>();
         for (CA ca : cas) {
             MarkeryCA.put(mMap.addMarker(new MarkerOptions().position(ca.getPos()).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_local_hospital_grey_900_18dp))), ca);
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getData();
     }
 
     @Override
