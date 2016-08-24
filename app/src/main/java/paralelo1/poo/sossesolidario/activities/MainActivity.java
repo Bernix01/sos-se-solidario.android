@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
@@ -53,11 +52,15 @@ public class MainActivity extends AppCompatActivity
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         assert fab != null;
+        if (!isAdmin) {
+            fab.setVisibility(View.INVISIBLE);
+        }
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent i = new Intent(getApplicationContext(), EditCA.class);
+                i.putExtra("ca", new CA());
+                startActivity(i);
             }
         });
 
@@ -71,10 +74,6 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         assert navigationView != null;
-        if(isAdmin){
-            navigationView.getMenu().clear();
-            navigationView.inflateMenu(R.menu.activity_main_drawer_admin);
-        }
         navigationView.setNavigationItemSelectedListener(this);
         headerLayout = navigationView.getHeaderView(0);
 
@@ -183,9 +182,6 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.nav_mis_donaciones:
                 fragmentClass = MisDonacionesFragment.class;
-                break;
-            case R.id.nav_admin_ca:
-                fragmentClass = AdminCA.class;
                 break;
             default:
                 fragmentClass = CAFragment.class;

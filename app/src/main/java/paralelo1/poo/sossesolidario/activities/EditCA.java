@@ -6,7 +6,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,7 +13,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import paralelo1.poo.sossesolidario.R;
 import paralelo1.poo.sossesolidario.objects.CA;
@@ -36,14 +34,6 @@ public class EditCA extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_c);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        TextView descripcion = (TextView) findViewById(R.id.edit_descripcion);
-        TextView nombre = (TextView) findViewById(R.id.edit_nombre);
-        TextView direccion = (TextView) findViewById(R.id.edit_direccion);
-        TextView fb = (TextView) findViewById(R.id.edit_facebook);
-        TextView tw = (TextView) findViewById(R.id.edit_twitter);
         if (extras != null) {
             final CA value = extras.getParcelable("nombre");
             //The key argument here must match that used in the other activity
@@ -61,14 +51,6 @@ public class EditCA extends Activity {
         eText5 = (EditText) findViewById(R.id.edit_twitter);
         btn1 = (Button) findViewById(R.id.btnActualizar);
         btn2 = (Button) findViewById(R.id.btnEliminar);
-            descripcion.setText(value.getDscr());
-            nombre.setText(value.getNombre());
-            assert direccion != null;
-            direccion.setText(value.getDireccion());
-            assert fb != null;
-            fb.setText(value.getFb());
-            assert tw != null;
-            tw.setText(value.getTw());
 
 
         btn1.setOnClickListener(new OnClickListener() {
@@ -246,7 +228,7 @@ public boolean onMenuItemSelected(int featureId, MenuItem item) {
     switch (item.getItemId())
     {
         case R.id.btnEliminar:
-            borrar(ca.getId());
+            borrar((Long)ca.getId());
             return true;
 
         case R.id.btnActualizar:
@@ -257,6 +239,5 @@ public boolean onMenuItemSelected(int featureId, MenuItem item) {
 
     return super.onMenuItemSelected(featureId, item);
 }
-
 
 }

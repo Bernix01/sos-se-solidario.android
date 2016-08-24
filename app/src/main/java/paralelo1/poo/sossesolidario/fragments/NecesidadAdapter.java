@@ -17,40 +17,41 @@ import paralelo1.poo.sossesolidario.objects.Necesidad;
 
 public class NecesidadAdapter extends RecyclerView.Adapter<NecesidadAdapter.MyViewHolder> {
 
-        private List<Necesidad> necesidadlist;
+    private List<Necesidad> necesidadlist;
 
-                public NecesidadAdapter(List<Necesidad> necesidadlist) {
-                        this.necesidadlist = necesidadlist;
-                }
+    public NecesidadAdapter(List<Necesidad> necesidadlist) {
+        this.necesidadlist = necesidadlist;
+    }
 
-                @Override
-                public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                        View itemView = LayoutInflater.from(parent.getContext())
-                                .inflate(R.layout.necesida_list_row, parent, false);
+    @Override
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.necesida_list_row, parent, false);
 
-                        return new MyViewHolder(itemView);
-                }
+        return new MyViewHolder(itemView);
+    }
 
-                @Override
-                public void onBindViewHolder(MyViewHolder holder, int position) {
-                        Necesidad nec = necesidadlist.get(position);
-                        //holder.title.setText(movie.getTitle());
-                        holder.prod.setText(nec.getNombre());
-                        holder.cant.setText(String.valueOf(nec.getCantidad()));
-                }
+    @Override
+    public void onBindViewHolder(MyViewHolder holder, int position) {
+        Necesidad nec = necesidadlist.get(position);
+        //holder.title.setText(movie.getTitle());
+        holder.prod.setText(nec.getNombre());
+        String cantidad = "Cantidad: " + String.valueOf(nec.getCantidad());
+        holder.cant.setText(cantidad);
+    }
 
-                @Override
-                public int getItemCount() {
-                        return necesidadlist.size();
-                }
+    @Override
+    public int getItemCount() {
+        return necesidadlist.size();
+    }
 
-        public class MyViewHolder extends RecyclerView.ViewHolder {
-                public TextView title, prod, cant;
+    public class MyViewHolder extends RecyclerView.ViewHolder {
+        public TextView title, prod, cant;
 
-                public MyViewHolder(View view) {
-                        super(view);
-                        prod = (TextView) view.findViewById(R.id.producto);
-                        cant = (TextView) view.findViewById(R.id.cantidad);
-                }
+        public MyViewHolder(View view) {
+            super(view);
+            prod = (TextView) view.findViewById(R.id.producto);
+            cant = (TextView) view.findViewById(R.id.cantidad);
         }
+    }
 }

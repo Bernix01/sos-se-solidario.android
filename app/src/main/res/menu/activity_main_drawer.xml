@@ -5,15 +5,15 @@
         <item
             android:id="@+id/nav_ca"
             android:checked="true"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@drawable/ic_local_hospital_grey_900_18dp"
             android:title="Centros de Acopio" />
         <item
             android:id="@+id/nav_donar"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/ic_sentiment_very_satisfied_grey_900_18dp"
             android:title="Donar" />
         <item
             android:id="@+id/nav_mis_donaciones"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/ic_book_grey_900_18dp"
             android:title="Mis donaciones" />
     </group>
 

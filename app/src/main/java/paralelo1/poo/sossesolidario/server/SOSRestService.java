@@ -26,11 +26,14 @@ public interface SOSRestService {
     @POST("CAs")
     Call<CA> createCA(@Body CA ca);
 
-    @GET("CAs/{id}/necesidades")
-    Call<List<Necesidad>> getCaNecesidades(@Path("id") int id);
-
     @DELETE("CAs/{id}")
     Call<Void> deleteCA(@Path("id") int id);
 
+    @GET("CAs/{id}/necesidades?filter=%7B%22order%22%3A%22cantidad%22%7D")
+    Call<List<Necesidad>> getCaNecesidades(@Path("id") int id);
+
+
+    @POST("CAs/{id}/necesidades")
+    Call<Necesidad> addNecesidad(@Path("id") int id);
 
 }

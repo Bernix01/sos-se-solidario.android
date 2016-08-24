@@ -20,6 +20,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -176,7 +177,7 @@ public class CAFragment extends Fragment implements OnMapReadyCallback, GoogleAp
     private void displayData(List<CA> cas) {
         MarkeryCA = new HashMap<>();
         for (CA ca : cas) {
-            MarkeryCA.put(mMap.addMarker(new MarkerOptions().position(ca.getPos())), ca);
+            MarkeryCA.put(mMap.addMarker(new MarkerOptions().position(ca.getPos()).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_local_hospital_grey_900_18dp))), ca);
         }
     }
 
