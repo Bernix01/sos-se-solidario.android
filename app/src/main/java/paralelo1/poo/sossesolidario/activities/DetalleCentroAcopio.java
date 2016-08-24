@@ -18,8 +18,9 @@ import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.util.List;
 
+import paralelo1.poo.sossesolidario.MyNecesidadRecyclerViewAdapter;
 import paralelo1.poo.sossesolidario.R;
-import paralelo1.poo.sossesolidario.fragments.NecesidadAdapter;
+import paralelo1.poo.sossesolidario.fragments.NecesidadFragment;
 import paralelo1.poo.sossesolidario.objects.CA;
 import paralelo1.poo.sossesolidario.objects.Necesidad;
 import retrofit2.Call;
@@ -30,7 +31,7 @@ public class DetalleCentroAcopio extends AppCompatActivity {
 
     private List<Necesidad> necesidadList;
     private RecyclerView recyclerView;
-    private NecesidadAdapter nAdapter;
+    private MyNecesidadRecyclerViewAdapter nAdapter;
     private boolean isAdmin;
     private CA ca;
 
@@ -89,7 +90,14 @@ public class DetalleCentroAcopio extends AppCompatActivity {
                     necesidadList = response.body();
                     if (necesidadList != null && necesidadList.size() > 0) {
 
-                        nAdapter = new NecesidadAdapter(necesidadList);
+                        nAdapter = new MyNecesidadRecyclerViewAdapter(necesidadList, new NecesidadFragment.OnListFragmentInteractionListener() {
+                            @Override
+                            public void onListFragmentInteraction(Necesidad item) {
+                                Intent i = new Intent(getApplicationContext(), DonarActivity.class);
+                                i.putExtra("cosa", item);
+                                startActivity(i);
+                            }
+                        });
                         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
                         recyclerView.setLayoutManager(mLayoutManager);
                         recyclerView.setItemAnimator(new DefaultItemAnimator());

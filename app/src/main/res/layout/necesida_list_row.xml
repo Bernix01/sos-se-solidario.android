@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
-    android:layout_margin="3dp"
+    android:layout_height="120dp"
+    android:layout_margin="5dp"
     android:background="@android:color/white"
     android:clickable="true"
     android:elevation="2dp"
@@ -14,18 +14,20 @@
     android:paddingTop="10dp">
 
     <TextView
-        android:id="@+id/producto"
+        android:id="@+id/cantidad"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/producto"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
+        android:text="65"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="16sp"
+        android:textSize="60sp"
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/cantidad"
+        android:id="@+id/producto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

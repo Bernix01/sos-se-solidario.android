@@ -10,9 +10,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.List;
+
 import paralelo1.poo.sossesolidario.MyNecesidadRecyclerViewAdapter;
 import paralelo1.poo.sossesolidario.R;
 import paralelo1.poo.sossesolidario.objects.Necesidad;
+import paralelo1.poo.sossesolidario.server.Rest;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A fragment representing a list of Items.
@@ -25,7 +31,7 @@ public class NecesidadFragment extends Fragment {
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
-    private int mColumnCount = 1;
+    private int mColumnCount = 3;
     private OnListFragmentInteractionListener mListener;
     private MyNecesidadRecyclerViewAdapter adapter1;
 
@@ -68,6 +74,19 @@ public class NecesidadFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
+            Rest.get().service().getNecesidades().enqueue(new Callback<List<Necesidad>>() {
+                @Override
+                public void onResponse(Call<List<Necesidad>> call, Response<List<Necesidad>> response) {
+                    MyNecesidadRecyclerViewAdapter adapter = new MyNecesidadRecyclerViewAdapter(response.body(), mListener);
+                    recyclerView.setHasFixedSize(true);
+                    recyclerView.setAdapter(adapter);
+                }
+
+                @Override
+                public void onFailure(Call<List<Necesidad>> call, Throwable t) {
+
+                }
+            });
 
 
         }

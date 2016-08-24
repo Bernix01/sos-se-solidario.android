@@ -36,4 +36,7 @@ public interface SOSRestService {
     @POST("CAs/{id}/necesidades")
     Call<Necesidad> addNecesidad(@Path("id") int id);
 
+    @GET("necesidades")
+    Call<List<Necesidad>> getNecesidades();
+
 }

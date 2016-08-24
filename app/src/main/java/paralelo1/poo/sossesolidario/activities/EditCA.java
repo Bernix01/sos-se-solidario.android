@@ -1,11 +1,12 @@
 package paralelo1.poo.sossesolidario.activities;
 
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,14 +18,11 @@ import android.widget.LinearLayout;
 import paralelo1.poo.sossesolidario.R;
 import paralelo1.poo.sossesolidario.objects.CA;
 
-public class EditCA extends Activity {
+public class EditCA extends AppCompatActivity {
     EditText eText1, eText2, eText3, eText4, eText5;
     Button btn1, btn2;
-    Intent intent = getIntent();
-    Bundle extra = intent.getExtras();
     private long id;
     private CA ca = new CA();
-    Bundle extras = getIntent().getExtras();
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -34,16 +32,10 @@ public class EditCA extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if (extras != null) {
-            final CA value = extras.getParcelable("nombre");
-            //The key argument here must match that used in the other activity
-
-            if (value == null) {
-                finish();
-                return;
-            }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_c);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         eText1 = (EditText) findViewById(R.id.edit_nombre);
         eText2 = (EditText) findViewById(R.id.edit_descripcion);
         eText3 = (EditText) findViewById(R.id.edit_direccion);
@@ -53,25 +45,36 @@ public class EditCA extends Activity {
         btn2 = (Button) findViewById(R.id.btnEliminar);
 
 
-        btn1.setOnClickListener(new OnClickListener() {
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
 
-            @Override
-            public void onClick(View v) {
-                guardar();
+        if (extras != null) {
+            ca = extras.getParcelable("ca");
+            //The key argument here must match that used in the other activity
+
+            if (ca == null) {
+                finish();
+                return;
             }
-        });
+            btn1.setOnClickListener(new OnClickListener() {
 
-        btn2.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    guardar();
+                }
+            });
 
-            @Override
-            public void onClick(View v) {
-                cancelar();
-            }
-        });
+            btn2.setOnClickListener(new OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    cancelar();
+                }
+            });
 
         }
-    }
 
+    }
 
 
     @Override
@@ -81,8 +84,7 @@ public class EditCA extends Activity {
         return true;
     }
 
-    private void setEdicion(boolean opcion)
-    {
+    private void setEdicion(boolean opcion) {
         eText1.setEnabled(opcion);
         eText2.setEnabled(opcion);
         eText3.setEnabled(opcion);
@@ -221,23 +223,22 @@ public class EditCA extends Activity {
 //        AppIndex.AppIndexApi.end(client, viewAction);
 //        client.disconnect();
 //    }
-@Override
 
-public boolean onMenuItemSelected(int featureId, MenuItem item) {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
 
-    switch (item.getItemId())
-    {
-        case R.id.btnEliminar:
-            borrar(ca.getId());
-            return true;
+        switch (item.getItemId()) {
+            case R.id.btnEliminar:
+                borrar(ca.getId());
+                return true;
 
-        case R.id.btnActualizar:
-            guardar();
-            return true;
+            case R.id.btnActualizar:
+                guardar();
+                return true;
 
+        }
+
+        return super.onOptionsItemSelected(item);
     }
-
-    return super.onMenuItemSelected(featureId, item);
-}
 
 }

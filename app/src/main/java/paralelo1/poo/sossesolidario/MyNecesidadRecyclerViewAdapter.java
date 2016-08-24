@@ -6,18 +6,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import paralelo1.poo.sossesolidario.fragments.NecesidadFragment.OnListFragmentInteractionListener;
-import paralelo1.poo.sossesolidario.objects.Necesidad;
-
 import java.util.List;
+
+import paralelo1.poo.sossesolidario.fragments.NecesidadFragment;
+import paralelo1.poo.sossesolidario.objects.Necesidad;
 
 
 public class MyNecesidadRecyclerViewAdapter extends RecyclerView.Adapter<MyNecesidadRecyclerViewAdapter.ViewHolder> {
 
     private final List<Necesidad> mValues;
-    private final OnListFragmentInteractionListener mListener;
+    private final NecesidadFragment.OnListFragmentInteractionListener mListener;
 
-    public MyNecesidadRecyclerViewAdapter(List<Necesidad> items, OnListFragmentInteractionListener listener) {
+    public MyNecesidadRecyclerViewAdapter(List<Necesidad> items, NecesidadFragment.OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -33,7 +33,7 @@ public class MyNecesidadRecyclerViewAdapter extends RecyclerView.Adapter<MyNeces
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         holder.mIdView.setText(holder.mItem.getNombre());
-        holder.mContentView.setText(holder.mItem.getCantidad());
+        holder.mContentView.setText(String.valueOf(holder.mItem.getCantidad()));
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override

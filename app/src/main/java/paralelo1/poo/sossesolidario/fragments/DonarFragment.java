@@ -4,11 +4,22 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import java.util.List;
 
 import paralelo1.poo.sossesolidario.R;
+import paralelo1.poo.sossesolidario.objects.Necesidad;
+import paralelo1.poo.sossesolidario.server.Rest;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -66,7 +77,29 @@ public class DonarFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_donar, container, false);
+        View v = inflater.inflate(R.layout.fragment_donar, container, false);
+
+        final RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.recycler_view);
+        Rest.get().service().getNecesidades().enqueue(new Callback<List<Necesidad>>() {
+            @Override
+            public void onResponse(Call<List<Necesidad>> call, Response<List<Necesidad>> response) {
+                List<Necesidad> necesidadList = response.body();
+                if (necesidadList != null && necesidadList.size() > 0) {
+
+                    NecesidadAdapter nAdapter = new NecesidadAdapter(necesidadList);
+                    RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getContext(), 2);
+                    recyclerView.setLayoutManager(mLayoutManager);
+                    recyclerView.setItemAnimator(new DefaultItemAnimator());
+                    recyclerView.setAdapter(nAdapter);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Necesidad>> call, Throwable t) {
+                Toast.makeText(getContext(), "Error al obtener donaciones disponibles.", Toast.LENGTH_SHORT).show();
+            }
+        });
+        return v;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

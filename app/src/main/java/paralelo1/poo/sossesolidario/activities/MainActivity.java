@@ -27,7 +27,7 @@ import paralelo1.poo.sossesolidario.objects.CA;
 import paralelo1.poo.sossesolidario.objects.Necesidad;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, CAFragment.OnFragmentInteractionListener, NecesidadFragment.OnListFragmentInteractionListener, MisDonacionesFragment.OnFragmentInteractionListener, AdminCA.OnFragmentInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener, CAFragment.OnFragmentInteractionListener, NecesidadFragment.OnListFragmentInteractionListener, MisDonacionesFragment.OnFragmentInteractionListener {
 
     protected View headerLayout;
     private boolean isAdmin;
