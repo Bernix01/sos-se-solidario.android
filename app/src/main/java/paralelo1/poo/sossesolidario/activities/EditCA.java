@@ -228,7 +228,7 @@ public boolean onMenuItemSelected(int featureId, MenuItem item) {
     switch (item.getItemId())
     {
         case R.id.btnEliminar:
-            borrar((Long)ca.getId());
+            borrar(ca.getId());
             return true;
 
         case R.id.btnActualizar:
